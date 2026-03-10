@@ -20,7 +20,7 @@ A cinematic, production-grade landing page for **Derivity** — an AI-powered fi
 ## Project Structure
 
 ```
-Derivity LP/
+Derivity-LP-main/
 ├── public/
 │   └── favicon.svg
 ├── src/
