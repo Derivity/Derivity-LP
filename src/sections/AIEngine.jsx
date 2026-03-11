@@ -121,17 +121,7 @@ export default function AIEngine() {
               ))}
             </ul>
 
-            <motion.a
-              href="#"
-              className="btn-secondary mt-10 inline-flex"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              Read Architecture Docs
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </motion.a>
+
           </motion.div>
 
           {/* Right — architecture diagram */}

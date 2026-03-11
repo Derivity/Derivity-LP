@@ -3,19 +3,19 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Send, Sparkles, RotateCcw, ArrowLeft, TrendingUp, PieChart, DollarSign, BarChart3 } from "lucide-react"
 
 const MOCK_RESPONSES = [
-  "I'm analyzing your query. Derivity's AI models are trained on proprietary financial datasets — full capabilities are rolling out soon.",
-  "Great question. Derivity's portfolio engine assesses your risk exposure across all asset classes and surfaces rebalancing opportunities in real time.",
-  "Our market intelligence layer processes thousands of data signals daily to surface relevant insights tailored to your portfolio.",
-  "In a fully deployed environment I'd connect to your accounts, run scenario analysis, and return a precise answer with supporting data.",
-  "Derivity is built to give every individual institutional-grade financial analysis — the kind previously reserved for hedge funds.",
-  "That's exactly the problem Derivity solves. Our AI synthesises macro trends, earnings data, and your personal cash flow into one unified view.",
-  "I'd normally cross-reference your spending patterns against your investment goals and flag any misalignments here. That feature is coming soon.",
+  "I'm Derivity AI — I'm currently in training and growing smarter every day. My full capabilities are rolling out soon, but I can already walk you through financial concepts and strategies.",
+  "Great question. I'm still in training, so consider this a preview of what's coming — Derivity is being built to give you institutional-grade portfolio analysis at your fingertips.",
+  "As Derivity AI, I'm designed to synthesise market signals, macro data, and your personal financial picture into one clear view. That full experience is on its way.",
+  "I'm currently under active training, so I can't connect to live accounts just yet — but I can reason through this with you based on what I know. Here's how I'd approach it.",
+  "Derivity is being built so every individual has access to the kind of financial intelligence that was once reserved for hedge funds. I'm the engine powering that — and I'm still learning.",
+  "That's exactly what Derivity is being trained to solve. I can share how the system is designed to approach this — just keep in mind I'm still in development and getting sharper every week.",
+  "I'm Derivity AI and I'm in training — which means my responses are illustrative for now. The vision is to give you a complete financial co-pilot. We're almost there.",
 ]
 
 const WELCOME_MSG = {
   id: "welcome",
   role: "assistant",
-  text: "Hi, I'm Derivity AI — your financial intelligence engine. Ask me anything about investments, markets, or personal finance.",
+  text: "Hi, I'm Derivity AI — built to be your personal financial intelligence engine. I'm currently in training, so my responses are illustrative and may not reflect live data. That said, I'm here and ready to help you think through investments, markets, budgeting, and more. What's on your mind?",
 }
 
 function useTypewriter(text, speed = 14) {

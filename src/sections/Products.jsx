@@ -177,16 +177,7 @@ function ProductCard({ product, index }) {
           {product.description}
         </p>
 
-        {/* CTA */}
-        <div className="flex items-center gap-2 text-[12.5px] font-semibold text-gray-600 group-hover:text-white transition-colors duration-300">
-          Explore
-          <svg
-            width="13" height="13" viewBox="0 0 13 13" fill="none"
-            className="translate-x-0 group-hover:translate-x-1.5 transition-transform duration-300"
-          >
-            <path d="M2 6.5h9M7.5 3l3.5 3.5L7.5 10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
+
       </div>
     </motion.div>
   )
