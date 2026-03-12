@@ -302,6 +302,62 @@ function getResponse(userText, fallbackIdx) {
   return FALLBACK_RESPONSES[fallbackIdx % FALLBACK_RESPONSES.length]
 }
 
+const STOCK_MAP = {
+  'apple': 'NASDAQ:AAPL', 'aapl': 'NASDAQ:AAPL',
+  'tesla': 'NASDAQ:TSLA', 'tsla': 'NASDAQ:TSLA',
+  'nvidia': 'NASDAQ:NVDA', 'nvda': 'NASDAQ:NVDA',
+  'microsoft': 'NASDAQ:MSFT', 'msft': 'NASDAQ:MSFT',
+  'google': 'NASDAQ:GOOGL', 'googl': 'NASDAQ:GOOGL', 'alphabet': 'NASDAQ:GOOGL',
+  'amazon': 'NASDAQ:AMZN', 'amzn': 'NASDAQ:AMZN',
+  'meta': 'NASDAQ:META', 'facebook': 'NASDAQ:META',
+  'netflix': 'NASDAQ:NFLX', 'nflx': 'NASDAQ:NFLX',
+  'bitcoin': 'BITSTAMP:BTCUSD', 'btc': 'BITSTAMP:BTCUSD',
+  'ethereum': 'BITSTAMP:ETHUSD', 'eth': 'BITSTAMP:ETHUSD',
+  'nifty 50': 'NSE:NIFTY', 'nifty50': 'NSE:NIFTY', 'nifty': 'NSE:NIFTY',
+  'sensex': 'BSE:SENSEX',
+  's&p 500': 'SP:SPX', 'sp500': 'SP:SPX', 's&p': 'SP:SPX', 'spx': 'SP:SPX',
+  'gold': 'FOREXCOM:XAUUSD',
+  'silver': 'FOREXCOM:XAGUSD',
+  'reliance': 'NSE:RELIANCE',
+  'tcs': 'NSE:TCS', 'tata consultancy': 'NSE:TCS',
+  'hdfc bank': 'NSE:HDFCBANK', 'hdfcbank': 'NSE:HDFCBANK',
+  'infosys': 'NSE:INFY', 'infy': 'NSE:INFY',
+  'wipro': 'NSE:WIPRO',
+  'icici bank': 'NSE:ICICIBANK', 'icicibank': 'NSE:ICICIBANK',
+  'bajaj finance': 'NSE:BAJFINANCE',
+  'adani': 'NSE:ADANIENT',
+  'usd inr': 'FX_IDC:USDINR', 'dollar': 'FX_IDC:USDINR',
+}
+
+const STOCK_DISPLAY = {
+  'NASDAQ:AAPL': 'Apple (AAPL)', 'NASDAQ:TSLA': 'Tesla (TSLA)',
+  'NASDAQ:NVDA': 'NVIDIA (NVDA)', 'NASDAQ:MSFT': 'Microsoft (MSFT)',
+  'NASDAQ:GOOGL': 'Alphabet / Google (GOOGL)', 'NASDAQ:AMZN': 'Amazon (AMZN)',
+  'NASDAQ:META': 'Meta (META)', 'NASDAQ:NFLX': 'Netflix (NFLX)',
+  'BITSTAMP:BTCUSD': 'Bitcoin (BTC)', 'BITSTAMP:ETHUSD': 'Ethereum (ETH)',
+  'NSE:NIFTY': 'Nifty 50', 'BSE:SENSEX': 'BSE Sensex',
+  'SP:SPX': 'S&P 500', 'FOREXCOM:XAUUSD': 'Gold (XAU/USD)',
+  'FOREXCOM:XAGUSD': 'Silver (XAG/USD)', 'NSE:RELIANCE': 'Reliance Industries',
+  'NSE:TCS': 'TCS', 'NSE:HDFCBANK': 'HDFC Bank',
+  'NSE:INFY': 'Infosys', 'NSE:WIPRO': 'Wipro',
+  'NSE:ICICIBANK': 'ICICI Bank', 'NSE:BAJFINANCE': 'Bajaj Finance',
+  'NSE:ADANIENT': 'Adani Enterprises', 'FX_IDC:USDINR': 'USD / INR',
+}
+
+function detectStockQuery(text) {
+  const lower = text.toLowerCase()
+  const priceIntent = ['price', 'chart', 'live', 'current', 'today', 'worth', 'rate', 'trading', 'how much', 'value', 'show me', 'tell me about']
+  const hasPriceIntent = priceIntent.some((kw) => lower.includes(kw))
+  const sortedKeys = Object.keys(STOCK_MAP).sort((a, b) => b.length - a.length)
+  for (const name of sortedKeys) {
+    if (lower.includes(name) && hasPriceIntent) {
+      const symbol = STOCK_MAP[name]
+      return { symbol, label: STOCK_DISPLAY[symbol] || name }
+    }
+  }
+  return null
+}
+
 const WELCOME_MSG = {
   id: "welcome",
   role: "assistant",
@@ -388,6 +444,66 @@ function UserBubble({ text }) {
   )
 }
 
+function StockWidget({ symbol, label }) {
+  const containerRef = useRef(null)
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    el.innerHTML = ""
+    const wrap = document.createElement("div")
+    wrap.className = "tradingview-widget-container"
+    const inner = document.createElement("div")
+    inner.className = "tradingview-widget-container__widget"
+    wrap.appendChild(inner)
+    const script = document.createElement("script")
+    script.src = "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js"
+    script.async = true
+    script.innerHTML = JSON.stringify({
+      symbol,
+      width: "100%",
+      height: 220,
+      locale: "en",
+      dateRange: "1D",
+      colorTheme: "dark",
+      isTransparent: true,
+      autosize: false,
+      largeChartUrl: "",
+    })
+    wrap.appendChild(script)
+    el.appendChild(wrap)
+  }, [symbol])
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      className="flex items-start gap-4 max-w-3xl"
+    >
+      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-blue-500 flex items-center justify-center mt-0.5 shadow-lg shadow-violet-900/40">
+        <Sparkles className="w-3.5 h-3.5 text-white" />
+      </div>
+      <div className="flex-1 pt-1">
+        <p className="text-[13px] text-gray-500 mb-2">
+          Live price for <span className="text-violet-400 font-medium">{label}</span>
+        </p>
+        <div
+          ref={containerRef}
+          style={{
+            width: "100%",
+            maxWidth: 420,
+            height: 220,
+            borderRadius: 14,
+            overflow: "hidden",
+            border: "1px solid rgba(139,92,246,0.18)",
+            background: "rgba(255,255,255,0.02)",
+          }}
+        />
+      </div>
+    </motion.div>
+  )
+}
+
 function Thinking() {
   return (
     <motion.div
@@ -448,6 +564,12 @@ export default function TryDerivity({ onBack }) {
     setMessages((prev) => [...prev, { id: Date.now(), role: "user", text: msg }])
     setThinking(true)
     setTimeout(() => {
+      const stockMatch = detectStockQuery(msg)
+      if (stockMatch) {
+        setMessages((prev) => [...prev, { id: Date.now() + 1, role: "widget", symbol: stockMatch.symbol, label: stockMatch.label }])
+        setThinking(false)
+        return
+      }
       const response = getResponse(msg, fallbackIdx)
       const isFallback = !TOPIC_RESPONSES.some(({ keywords }) =>
         keywords.some((kw) => msg.toLowerCase().includes(kw))
@@ -653,6 +775,8 @@ export default function TryDerivity({ onBack }) {
           {messages.map((msg, i) =>
             msg.role === "user"
               ? <UserBubble key={msg.id} text={msg.text} />
+              : msg.role === "widget"
+              ? <StockWidget key={msg.id} symbol={msg.symbol} label={msg.label} />
               : <AssistantBubble key={msg.id} text={msg.text}
                   animate={i === messages.length - 1 && msg.id !== "welcome"} />
           )}
