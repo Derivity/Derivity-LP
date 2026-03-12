@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import Navbar from './components/Navbar'
 import Hero from './sections/Hero'
+import MarketTicker from './sections/MarketTicker'
 import Products from './sections/Products'
 import AIEngine from './sections/AIEngine'
 import Features from './sections/Features'
@@ -38,6 +39,7 @@ function App() {
     <div className="bg-black text-white overflow-x-hidden">
       <Navbar />
       <Hero />
+      <MarketTicker />
       <Products />
       <AIEngine />
       <Features />
