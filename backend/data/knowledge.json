@@ -1,0 +1,127 @@
+{
+  "what is derivity": "Derivity is a financial intelligence platform that unifies finance tools — AI assistant, portfolio analytics, transaction tracking, market intelligence, and developer APIs — into one seamless system.",
+  "who created derivity": "Derivity was created by Akshat Mishra.",
+  "what does derivity do": "Derivity unifies finance tools into one system. It offers an AI financial assistant, smart portfolio insights, automated finance tracking, market intelligence, and enterprise APIs for developers.",
+  "who are you": "I'm Derivity AI — your personal finance assistant, here to make money concepts simple and accessible.",
+  "tell me about yourself": "I'm Derivity AI — your personal finance assistant. I can explain any finance topic in plain language, from the very basics to more advanced concepts.",
+  "about derivity": "Derivity is a financial intelligence platform built to reimagine how people interact with their finances. It combines an AI assistant, portfolio tools, transaction tracking, and a developer API suite into one platform.",
+  "what is the derivity ai product": "Derivity Financial AI is a proprietary financial AI built entirely in-house on Derivity's own models. It can answer anything about your finances, from tax strategy to retirement planning. Currently under development.",
+  "what products does derivity offer": "Derivity offers four core products: (1) Derivity AI — a conversational financial assistant; (2) Unified Finance Dashboard — connects 12,000+ institutions; (3) Investment Intelligence — AI-powered portfolio analysis; (4) Real-time Analytics — predictive financial insights.",
+  "what is the derivity dashboard": "The Unified Finance Dashboard connects all your accounts, investments, and transactions in one intelligent view. It syncs in real-time across 12,000+ financial institutions globally.",
+  "what are derivity enterprise apis": "Derivity Enterprise APIs let developers build next-generation financial products with a comprehensive API suite covering payment rails, account aggregation, AI models, and compliance — all as a service.",
+  "is derivity free": "Derivity is currently in development. Pricing details will be announced when the platform launches.",
+  "when will derivity launch": "Derivity is actively under development. Stay tuned for launch announcements.",
+  "how do i contact derivity": "You can reach Derivity through the website's contact section or by following official Derivity channels.",
+
+  "what is a stock": "A stock is a small piece of ownership in a company. When you buy a stock, you become a part-owner of that company. If the company grows and does well, the stock price goes up and you profit. Some companies also pay dividends — a share of profits paid to shareholders.",
+  "what are stocks": "Stocks are small ownership units of a company sold to the public. When you buy a stock you become a part-owner. You make money when the stock price rises or when the company pays dividends.",
+  "how does a stock work": "Companies sell shares to raise money. When you buy a share, you own a slice of that company. If the company grows, your share's value rises. You profit either by selling at a higher price or through dividends the company pays out.",
+
+  "what is a mutual fund": "A mutual fund pools money from many investors to buy a diversified basket of stocks, bonds, or other assets. A professional fund manager handles the investments. It's one of the easiest ways to invest in the market without picking individual stocks.",
+  "what is sip": "SIP (Systematic Investment Plan) means investing a fixed amount every month into a mutual fund — automatically. It's like a recurring deposit, except your money goes into the market and has higher growth potential. Even ₹500/month is a great start.",
+  "how does sip work": "You choose a fixed monthly amount — even ₹500. On a fixed date each month it auto-deducts from your bank and buys units of a mutual fund. Over years, these units grow in value. ₹5,000/month for 20 years at 12% return ≈ ₹49 lakh from just ₹12 lakh invested.",
+
+  "what is an index fund": "An index fund is a mutual fund that simply copies a market index like the Nifty 50. It automatically holds all 50 stocks in the index. When the index goes up, your investment goes up too. It's very low cost and has historically outperformed most actively managed funds over the long run.",
+  "what is an etf": "An ETF (Exchange Traded Fund) is like an index fund but it trades on the stock exchange like a regular stock. It tracks an index or asset class, is low cost, and provides instant diversification.",
+  "what is a nifty 50 index fund": "A Nifty 50 index fund holds all 50 companies in the Nifty 50 index. It's very low cost, automatically diversified, and is one of the best ways for beginners to start investing in Indian equities.",
+
+  "what is the nifty 50": "Nifty 50 tracks the top 50 companies on the NSE (National Stock Exchange) in India — including Reliance, TCS, HDFC Bank, Infosys, and more. When people say 'the market went up today,' they usually mean Nifty moved up.",
+  "what is the sensex": "Sensex tracks the top 30 companies on the BSE (Bombay Stock Exchange). It's India's oldest and most recognised stock market index and is often used as a bellwether for the overall economy.",
+  "what is nse": "NSE (National Stock Exchange) is India's largest stock exchange by trading volume. Founded in 1992, it's fully electronic and home to the Nifty 50 index.",
+  "what is bse": "BSE (Bombay Stock Exchange) is Asia's oldest stock exchange, founded in 1875. It lists over 5,000 companies and is home to the Sensex index.",
+
+  "what is nav": "NAV (Net Asset Value) is the price of one unit of a mutual fund. When you invest ₹5,000 in a fund with a NAV of ₹50, you get 100 units. When NAV rises to ₹70, your investment is worth ₹7,000. NAV is updated once a day after market hours.",
+
+  "what is compounding": "Compounding means your money earns returns, and then those returns also earn returns. Example: ₹1,00,000 at 12%/year → ₹3,10,000 after 10 years and ₹9,64,000 after 20 years — without adding another rupee. Starting early is the key to maximising compounding.",
+  "what is compound interest": "Compound interest means you earn interest on your principal AND on previously earned interest. Over time this creates exponential growth. Starting at 22 vs 32 can mean having 3x more money at retirement, purely due to those extra 10 years of compounding.",
+  "power of compounding": "Compounding is when your returns earn more returns. ₹1,00,000 invested at 12% grows to ₹9,64,000 in 20 years without adding any more money. Time is the biggest advantage — start investing as early as possible.",
+
+  "what is inflation": "Inflation means prices rise over time — so the same money buys less in the future. India's average inflation is roughly 5–6%. If your savings account earns 3% and inflation is 6%, you're losing purchasing power. Investing in equities (which historically return 12–15%) helps you outpace inflation.",
+
+  "what is diversification": "Diversification means spreading your money across different types of investments — stocks, gold, bonds — so that if one falls, the others cushion the blow. A simple split: equity funds for growth, gold for safety, bonds/FDs for stability.",
+
+  "what is dollar cost averaging": "Dollar-Cost Averaging (DCA) means investing a fixed amount every month regardless of market conditions. When prices are low you buy more units. When prices are high you buy fewer. Over time your average cost stays low — this is exactly how a SIP works.",
+
+  "what is a bond": "A bond is a loan you give to a government or company. They pay you interest in return. Example: you lend ₹10,000 to the government for 5 years at 7% — they pay ₹700/year and return your ₹10,000 at the end. Bonds are lower risk than stocks but offer lower returns.",
+  "what are bonds": "Bonds are debt instruments where you lend money to a government or company and earn fixed interest. They are lower risk than stocks, provide stable income, and are used as a safety cushion in a portfolio.",
+
+  "what is a fixed deposit": "A Fixed Deposit (FD) is a bank product where you deposit money for a fixed term and earn a guaranteed interest rate (currently ~6–7.5%). It is completely safe for amounts up to ₹5 lakh (government insured). FDs are great for safety but may not beat inflation over the long term.",
+  "what is fd": "FD (Fixed Deposit) is when you park money with a bank for a set period at a guaranteed interest rate. It is very safe, but interest is taxed as income, so real post-tax returns can be low. Best for short-term goals or as part of an emergency fund.",
+
+  "what is ppf": "PPF (Public Provident Fund) is a government-backed savings scheme that earns ~7.1% interest — completely tax-free. It has a 15-year lock-in and is one of the safest long-term savings options in India.",
+  "what is elss": "ELSS (Equity Linked Savings Scheme) is a type of mutual fund that invests in equities with a 3-year lock-in. It qualifies for ₹1.5 lakh tax deduction under Section 80C and has historically returned 12–15% — making it the best combination of tax saving and wealth creation.",
+  "what is nps": "NPS (National Pension System) is a government retirement savings scheme. It builds a retirement corpus and gives an additional ₹50,000 tax deduction beyond the normal ₹1.5 lakh 80C limit.",
+  "what is tax saving investment": "Tax-saving investments reduce your taxable income and grow your money. The main options are PPF (safe, tax-free), ELSS (mutual fund, highest returns), and NPS (retirement-focused). You can save up to ₹1.5 lakh of taxable income using these under Section 80C.",
+
+  "what is a bull market": "A bull market means the stock market is going up — prices are rising, the economy is doing well, and people are optimistic. Best strategy: stay invested and let your money grow.",
+  "what is a bear market": "A bear market means the stock market is falling, typically by 20% or more. People get fearful. But historically, every bear market ends and markets recover. Best strategy: don't panic-sell. Keep your SIPs running — you're buying at lower prices.",
+  "what is a market correction": "A market correction is a short-term dip of 10–20% in stock prices. It happens roughly every 1–2 years and is completely normal. Use it as an opportunity to invest more if possible.",
+
+  "what is an emergency fund": "An emergency fund is 3–6 months of living expenses set aside for unexpected situations — job loss, medical bills, urgent repairs. Keep it in a liquid mutual fund (better returns than a savings account, and withdrawable within 24 hours). Build this before investing in anything else.",
+
+  "what is risk in investing": "Risk in investing is the chance your investment goes down in value. Higher potential return = higher risk. Fixed Deposits are very low risk. Equity mutual funds are medium-high risk but historically the best long-term growth. Time reduces equity risk significantly.",
+  "what is risk tolerance": "Risk tolerance is how much market volatility you can emotionally handle. Ask yourself: if my investment dropped 30% tomorrow, would I panic or stay calm? If you'd panic, stick to safer options like debt funds. If you'd stay calm, you can take on more equity.",
+
+  "what is gold investment": "Gold is a classic safe-haven asset that often rises when stocks fall. Best ways to invest: Sovereign Gold Bond (earns gold returns + 2.5% interest/year, tax-free after 8 years), Gold ETF (easy to buy/sell), or digital gold. Hold ~10% of your portfolio in gold as insurance.",
+  "what is a sovereign gold bond": "A Sovereign Gold Bond (SGB) is issued by the Indian government and gives you gold price returns plus 2.5% annual interest. It's completely tax-free if held to maturity (8 years) and is the best way to invest in gold.",
+
+  "what is real estate investing": "Real estate involves buying property to earn rental income or capital appreciation. Pros: physical asset, rental income. Cons: illiquid, expensive, large loans. Consider REITs (Real Estate Investment Trusts) as a simpler alternative — invest from ₹10,000–15,000 in commercial properties listed on the stock exchange.",
+
+  "what is cryptocurrency": "Cryptocurrency is digital money not issued or controlled by any government — Bitcoin and Ethereum are the most well-known. It can grow a lot, but can also drop 50–80% very quickly. Keep crypto to 5–10% max of your portfolio, and never invest money you can't afford to lose entirely.",
+
+  "what is trading": "Trading means buying and selling stocks quickly to profit from short-term price changes. It requires daily attention, is very stressful, and SEBI data shows 9 out of 10 retail traders lose money. Most people are better served by long-term investing through SIPs.",
+  "trading vs investing": "Trading seeks short-term profits through frequent buying and selling. Investing means buying and holding for years. Investing is lower stress, lower tax, and historically far more reliable for building wealth. Trading can be learned risk-free through paper trading first.",
+
+  "what is a demat account": "A Demat account is a digital locker for your stocks and investments — it stores them electronically. To invest in stocks you need: (1) Demat account, (2) trading account, and (3) bank account. Popular apps to open one: Groww (best for beginners), Zerodha (most popular), Upstox.",
+
+  "what is a p/e ratio": "P/E Ratio (Price-to-Earnings) = Stock Price ÷ Earnings per Share. It tells you if a stock is expensive relative to what the company earns. Below 15 = potentially cheap. 15–25 = fair value. Above 30 = expensive. Use it alongside other metrics, not in isolation.",
+  "what is fundamental analysis": "Fundamental analysis is evaluating a company's financials, management, and industry to decide if its stock is a good investment. Key metrics include P/E ratio, revenue growth, profit margins, and debt levels.",
+
+  "what is a dividend": "A dividend is when a company shares part of its profit with shareholders. Example: you own 100 shares, company pays ₹5 dividend/share — you receive ₹500 in your account without selling anything. Dividends are taxed as regular income.",
+
+  "what is a credit score": "Your credit score (CIBIL score) is a number between 300–900 showing banks how trustworthy you are with money. 750–900 is excellent. Below 650 needs improvement. Improve it by paying bills on time, keeping credit card usage below 30% of your limit, and avoiding too many loan applications.",
+
+  "what is savings rate": "Savings rate is the percentage of your income you save each month. A good target is 20% of your income. The 50/30/20 rule: 50% on needs, 30% on wants, 20% on savings and investments. Transfer savings on the day your salary arrives — before you spend it.",
+
+  "how do i start investing": "Start in 3 steps: (1) Build a 3–6 month emergency fund in a liquid mutual fund. (2) Set up a Nifty 50 index fund SIP for as little as ₹500/month on Groww or Zerodha. (3) Stay consistent and don't panic during market dips. Time and consistency matter more than the amount.",
+  "how to invest with small money": "Start with a SIP in a Nifty 50 index fund for as little as ₹500/month. You don't need a large amount — you need consistency and time. Even ₹1,000/month for 20 years at 12% return grows to nearly ₹10 lakh.",
+
+  "what is a portfolio": "A portfolio is the total collection of all your investments — stocks, mutual funds, gold, bonds, FDs, etc. A good portfolio is diversified across asset classes to balance growth and safety.",
+
+  "what is passive income": "Passive income is money earned with minimal ongoing effort — like dividends, interest from FDs/bonds, rental income from property or REITs. Building passive income streams over time is a key goal of long-term investing.",
+
+  "what is financial planning": "Financial planning is the process of setting financial goals and creating a strategy to achieve them. It covers budgeting, saving, investing, tax planning, insurance, and retirement. Start by tracking income and expenses, building an emergency fund, then investing regularly.",
+
+  "what is a hedge": "Hedging means making an investment designed to reduce the risk of another investment. For example, holding gold hedges against stock market crashes because gold often rises when stocks fall. Options contracts are another form of hedging used by professionals.",
+
+  "what is liquidity": "Liquidity means how quickly and easily you can convert an investment to cash without losing value. Cash and liquid mutual funds are highly liquid. Real estate and PPF are illiquid. Always keep some liquid assets for emergencies.",
+
+  "what is asset allocation": "Asset allocation is how you divide your money among different asset classes — stocks, bonds, gold, cash. A common rule: 100 minus your age = % to hold in equity. A 30-year-old might hold 70% stocks, 20% bonds, 10% gold. Rebalance periodically.",
+
+  "what is rebalancing": "Rebalancing means periodically adjusting your portfolio back to your target allocation. If stocks rise sharply, they may become 80% of your portfolio instead of 70% — you'd sell some stocks and buy more bonds/gold to restore balance. Done annually or when allocation drifts by 5%+.",
+
+  "what is a systematic withdrawal plan": "SWP (Systematic Withdrawal Plan) is the reverse of SIP. You invest a lump sum in a mutual fund and set up automatic monthly withdrawals. Popular for retirees who want a regular monthly income from their corpus.",
+
+  "what is a lump sum investment": "A lump sum investment is investing a large amount all at once rather than in monthly instalments. It can generate higher returns than SIP if the market is at a low point, but it requires good timing. For most investors, SIP is safer and more practical.",
+
+  "what is a unicorn startup": "A unicorn is a private startup company valued at over $1 billion. The term was coined because such companies were once rare. Examples: Zepto, CRED, Razorpay, Udaan are Indian unicorns.",
+
+  "what is venture capital": "Venture Capital (VC) is private funding given to early-stage startups in exchange for equity (a share of the company). VCs take high risk hoping for very high returns if the startup succeeds.",
+
+  "what is an ipo": "An IPO (Initial Public Offering) is when a private company sells shares to the public on a stock exchange for the first time. It's how a company goes from private to publicly traded. You can apply for IPOs through your Demat account.",
+
+  "what is a startup": "A startup is a new business designed to grow quickly and solve a large problem — usually with technology. Startups raise funding from angel investors and VCs in exchange for equity, with the goal of eventually going public or being acquired.",
+
+  "what is fintech": "Fintech (Financial Technology) refers to companies using technology to improve financial services — payments, lending, investing, insurance. Examples: Razorpay (payments), Zerodha (investing), Paytm (digital wallet), CRED (credit card management).",
+
+  "what is derivity fintech": "Derivity is a fintech company building a unified financial intelligence platform. It aims to bring together AI-powered financial tools, portfolio management, analytics, and developer APIs into one product ecosystem.",
+
+  "hello": "Hello! I'm Derivity AI. Ask me anything about finance — stocks, SIPs, investing strategies, or how Derivity works.",
+  "hi": "Hi there! I'm Derivity AI, your personal finance guide. What would you like to know today?",
+  "hey": "Hey! I'm Derivity AI. Ask me any finance question and I'll explain it in simple terms.",
+  "help": "I can help with any finance topic! Try asking about: what is a SIP, how does compounding work, what is diversification, how to start investing, what is an index fund, or what Derivity does.",
+  "thank you": "You're welcome! Feel free to ask any other finance questions.",
+  "thanks": "Happy to help! Ask me anything else about finance or Derivity.",
+  "what can you help with": "I can explain any finance topic in plain language — stocks, mutual funds, SIPs, compound interest, budgeting, tax-saving investments, index funds, gold, crypto, trading vs investing, and everything in between. I can also tell you about Derivity's products and platform.",
+  "what can you do": "I'm a finance knowledge assistant. I can explain financial concepts, investment strategies, market terms, and answer questions about the Derivity platform — all in simple, jargon-free language."
+}
