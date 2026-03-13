@@ -294,12 +294,35 @@ const FALLBACK_RESPONSES = [
 ]
 
 function getResponse(userText, fallbackIdx) {
-  const lower = userText.toLowerCase()
-  const match = TOPIC_RESPONSES.find(({ keywords }) =>
-    keywords.some((kw) => lower.includes(kw))
-  )
+  const match = findTopicMatch(userText)
   if (match) return match.response
   return FALLBACK_RESPONSES[fallbackIdx % FALLBACK_RESPONSES.length]
+}
+
+function normalizeForMatch(text) {
+  return String(text || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function hasKeywordMatch(inputText, keyword) {
+  const input = normalizeForMatch(inputText)
+  const key = normalizeForMatch(keyword)
+  if (!input || !key) return false
+  if (input.includes(key)) return true
+
+  // Also compare compact forms so variants like "nifty50" and "nifty 50" match.
+  const compactInput = input.replace(/\s+/g, "")
+  const compactKey = key.replace(/\s+/g, "")
+  return compactInput.includes(compactKey)
+}
+
+function findTopicMatch(userText) {
+  return TOPIC_RESPONSES.find(({ keywords }) =>
+    keywords.some((kw) => hasKeywordMatch(userText, kw))
+  )
 }
 
 const STOCK_MAP = {
@@ -345,12 +368,12 @@ const STOCK_DISPLAY = {
 }
 
 function detectStockQuery(text) {
-  const lower = text.toLowerCase()
+  const normalizedText = normalizeForMatch(text)
   const priceIntent = ['price', 'chart', 'live', 'current', 'today', 'worth', 'rate', 'trading', 'how much', 'value', 'show me', 'tell me about']
-  const hasPriceIntent = priceIntent.some((kw) => lower.includes(kw))
+  const hasPriceIntent = priceIntent.some((kw) => hasKeywordMatch(normalizedText, kw))
   const sortedKeys = Object.keys(STOCK_MAP).sort((a, b) => b.length - a.length)
   for (const name of sortedKeys) {
-    if (lower.includes(name) && hasPriceIntent) {
+    if (hasKeywordMatch(normalizedText, name) && hasPriceIntent) {
       const symbol = STOCK_MAP[name]
       return { symbol, label: STOCK_DISPLAY[symbol] || name }
     }
@@ -571,9 +594,7 @@ export default function TryDerivity({ onBack }) {
         return
       }
       const response = getResponse(msg, fallbackIdx)
-      const isFallback = !TOPIC_RESPONSES.some(({ keywords }) =>
-        keywords.some((kw) => msg.toLowerCase().includes(kw))
-      )
+      const isFallback = !findTopicMatch(msg)
       if (isFallback) setFallbackIdx((i) => i + 1)
       setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: response }])
       setThinking(false)
