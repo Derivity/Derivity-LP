@@ -184,33 +184,41 @@ body {
   transform: translateY(-2px);
 }
 
-/* ─── Premium Try Derivity button ─────────────────────── */
+/* ─── Premium Try Derivity button (Liquid Glass) ───────── */
 @keyframes premiumTrySheen {
   0% {
-    transform: translateX(-140%) skewX(-20deg);
+    transform: translateX(-145%) skewX(-18deg);
     opacity: 0;
   }
-  18% {
-    opacity: 0.8;
+  16% {
+    opacity: 0.72;
   }
-  55% {
-    transform: translateX(190%) skewX(-20deg);
+  52% {
+    transform: translateX(215%) skewX(-18deg);
     opacity: 0;
   }
   100% {
-    transform: translateX(190%) skewX(-20deg);
+    transform: translateX(215%) skewX(-18deg);
     opacity: 0;
+  }
+}
+
+@keyframes premiumTryBlob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(6%, -8%) scale(1.09);
   }
 }
 
 @keyframes premiumTryAura {
   0%,
   100% {
-    transform: scale(0.98);
-    opacity: 0.5;
+    opacity: 0.45;
   }
   50% {
-    transform: scale(1.03);
     opacity: 0.95;
   }
 }
@@ -222,21 +230,29 @@ body {
   justify-content: center;
   gap: 9px;
   padding: 12px 22px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background:
-    radial-gradient(120% 150% at 0% 100%, rgba(251, 191, 36, 0.28) 0%, transparent 40%),
-    linear-gradient(135deg, #0ea5e9 0%, #2563eb 46%, #4338ca 100%);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(186, 230, 253, 0.16) 32%,
+    rgba(167, 139, 250, 0.14) 65%,
+    rgba(255, 255, 255, 0.18) 100%
+  );
+  backdrop-filter: blur(16px) saturate(1.35);
+  -webkit-backdrop-filter: blur(16px) saturate(1.35);
   box-shadow:
-    0 8px 26px rgba(37, 99, 235, 0.34),
-    inset 0 1px 0 rgba(255, 255, 255, 0.34),
-    inset 0 -1px 0 rgba(15, 23, 42, 0.35);
+    0 10px 30px rgba(14, 116, 144, 0.28),
+    0 2px 10px rgba(30, 41, 59, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.2);
   color: #f8fafc;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.01em;
   text-decoration: none;
+  text-shadow: 0 1px 10px rgba(15, 23, 42, 0.32);
   white-space: nowrap;
   overflow: hidden;
   isolation: isolate;
@@ -250,29 +266,52 @@ body {
 .premium-try-btn::before {
   content: '';
   position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+}
+
+.premium-try-btn__surface {
+  position: absolute;
   inset: 1px;
-  border-radius: 11px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.04));
-  opacity: 0.65;
+  border-radius: 13px;
+  background:
+    radial-gradient(160% 140% at 12% 5%, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 45%),
+    radial-gradient(130% 120% at 88% 100%, rgba(165, 243, 252, 0.2) 0%, rgba(165, 243, 252, 0) 55%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.04));
   z-index: -1;
 }
 
 .premium-try-btn__aura {
   position: absolute;
-  inset: -30%;
-  background: radial-gradient(circle at 50% 50%, rgba(125, 211, 252, 0.42) 0%, rgba(99, 102, 241, 0.02) 62%);
+  inset: -45%;
+  background: radial-gradient(circle at 50% 50%, rgba(125, 211, 252, 0.34) 0%, rgba(125, 211, 252, 0) 58%);
+  z-index: -3;
+  filter: blur(8px);
+  animation: premiumTryAura 2.6s ease-in-out infinite;
+}
+
+.premium-try-btn__blob {
+  position: absolute;
+  width: 64%;
+  height: 180%;
+  top: -42%;
+  left: -6%;
+  background: radial-gradient(ellipse at center, rgba(167, 139, 250, 0.3) 0%, rgba(167, 139, 250, 0) 68%);
+  mix-blend-mode: screen;
   z-index: -2;
-  animation: premiumTryAura 2.8s ease-in-out infinite;
+  animation: premiumTryBlob 4.4s ease-in-out infinite;
 }
 
 .premium-try-btn__sheen {
   position: absolute;
-  top: -18%;
-  bottom: -18%;
-  width: 38%;
+  top: -26%;
+  bottom: -26%;
+  width: 36%;
   left: 0;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.42) 48%, rgba(255, 255, 255, 0) 100%);
-  animation: premiumTrySheen 3.6s ease-in-out infinite;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0) 100%);
+  animation: premiumTrySheen 3.8s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -290,9 +329,10 @@ body {
 
 .premium-try-btn:hover {
   box-shadow:
-    0 14px 36px rgba(37, 99, 235, 0.44),
-    0 2px 18px rgba(30, 64, 175, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    0 16px 44px rgba(14, 116, 144, 0.34),
+    0 3px 14px rgba(15, 23, 42, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.26);
 }
 
 .premium-try-btn:hover .premium-try-btn__arrow {
@@ -303,6 +343,11 @@ body {
   .premium-try-btn {
     padding: 12px 18px;
     font-size: 13.5px;
+    border-radius: 13px;
+  }
+
+  .premium-try-btn__surface {
+    border-radius: 12px;
   }
 }
 
