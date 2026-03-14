@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import PremiumTryButton from '../components/PremiumTryButton'
 
 export default function Footer() {
   return (
@@ -19,12 +20,7 @@ export default function Footer() {
           </span>
 
           {/* Only real link */}
-          <a
-            href="/chat.html"
-            className="text-[13px] text-gray-500 hover:text-gray-200 transition-colors duration-200"
-          >
-            Try Derivity AI →
-          </a>
+          <PremiumTryButton label="Try Derivity AI" className="!text-[13px] !px-6 !py-[11px]" />
         </motion.div>
 
         <div className="w-16 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent)' }} />

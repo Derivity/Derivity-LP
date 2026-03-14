@@ -184,6 +184,128 @@ body {
   transform: translateY(-2px);
 }
 
+/* ─── Premium Try Derivity button ─────────────────────── */
+@keyframes premiumTrySheen {
+  0% {
+    transform: translateX(-140%) skewX(-20deg);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.8;
+  }
+  55% {
+    transform: translateX(190%) skewX(-20deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(190%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes premiumTryAura {
+  0%,
+  100% {
+    transform: scale(0.98);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.95;
+  }
+}
+
+.premium-try-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background:
+    radial-gradient(120% 150% at 0% 100%, rgba(251, 191, 36, 0.28) 0%, transparent 40%),
+    linear-gradient(135deg, #0ea5e9 0%, #2563eb 46%, #4338ca 100%);
+  box-shadow:
+    0 8px 26px rgba(37, 99, 235, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -1px 0 rgba(15, 23, 42, 0.35);
+  color: #f8fafc;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  isolation: isolate;
+  will-change: transform;
+}
+
+.premium-try-btn--full {
+  width: 100%;
+}
+
+.premium-try-btn::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.04));
+  opacity: 0.65;
+  z-index: -1;
+}
+
+.premium-try-btn__aura {
+  position: absolute;
+  inset: -30%;
+  background: radial-gradient(circle at 50% 50%, rgba(125, 211, 252, 0.42) 0%, rgba(99, 102, 241, 0.02) 62%);
+  z-index: -2;
+  animation: premiumTryAura 2.8s ease-in-out infinite;
+}
+
+.premium-try-btn__sheen {
+  position: absolute;
+  top: -18%;
+  bottom: -18%;
+  width: 38%;
+  left: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.42) 48%, rgba(255, 255, 255, 0) 100%);
+  animation: premiumTrySheen 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.premium-try-btn__label,
+.premium-try-btn__arrow {
+  position: relative;
+  z-index: 2;
+}
+
+.premium-try-btn__arrow {
+  font-size: 13px;
+  transform: translateX(0);
+  transition: transform 0.28s ease;
+}
+
+.premium-try-btn:hover {
+  box-shadow:
+    0 14px 36px rgba(37, 99, 235, 0.44),
+    0 2px 18px rgba(30, 64, 175, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+.premium-try-btn:hover .premium-try-btn__arrow {
+  transform: translateX(2px);
+}
+
+@media (max-width: 640px) {
+  .premium-try-btn {
+    padding: 12px 18px;
+    font-size: 13.5px;
+  }
+}
+
 /* ─── Feature cards ─────────────────────────────────────── */
 .feature-card {
   position: relative;

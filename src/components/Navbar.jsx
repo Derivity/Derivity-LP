@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import PremiumTryButton from './PremiumTryButton'
 
 const navLinks = [
   { label: 'Platform', href: '#products' },
@@ -68,12 +69,7 @@ export default function Navbar() {
 
               {/* Single CTA */}
               <div className="hidden md:flex items-center">
-                <a
-                  href="/chat.html"
-                  className="btn-primary !py-2.5 !px-5 !text-[13.5px] !rounded-lg"
-                >
-                  Try Derivity
-                </a>
+                <PremiumTryButton className="!py-2.5 !px-5 !text-[13.5px]" />
               </div>
 
               {/* Mobile hamburger */}
@@ -115,9 +111,11 @@ export default function Navbar() {
               </motion.a>
             ))}
             <div className="pt-4">
-              <a href="/chat.html" className="btn-primary !w-full !text-center" onClick={() => setMenuOpen(false)}>
-                Try Derivity
-              </a>
+              <PremiumTryButton
+                fullWidth
+                className="!text-center"
+                onClick={() => setMenuOpen(false)}
+              />
             </div>
           </motion.div>
         )}

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import ParticleNetwork from '../components/ParticleNetwork'
+import PremiumTryButton from '../components/PremiumTryButton'
 
 export default function CTA() {
   return (
@@ -56,17 +57,7 @@ export default function CTA() {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <motion.a
-            href="/chat.html"
-            className="btn-primary !text-[15px] !py-[15px] !px-8"
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-          >
-            Try Derivity
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </motion.a>
+          <PremiumTryButton className="!text-[15px] !py-[15px] !px-8" />
           <motion.a
             href="mailto:hello@derivity.ai"
             className="btn-secondary !text-[15px] !py-[15px] !px-8"
