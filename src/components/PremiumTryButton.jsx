@@ -17,9 +17,11 @@ export default function PremiumTryButton({
       transition={{ type: 'spring', stiffness: 360, damping: 22, mass: 0.7 }}
       {...props}
     >
+      <span className="premium-try-btn__ring" aria-hidden="true" />
       <span className="premium-try-btn__surface" aria-hidden="true" />
       <span className="premium-try-btn__aura" aria-hidden="true" />
       <span className="premium-try-btn__blob" aria-hidden="true" />
+      <span className="premium-try-btn__orb" aria-hidden="true" />
       <span className="premium-try-btn__sheen" aria-hidden="true" />
       <span className="premium-try-btn__label">{label}</span>
       {showArrow && <span className="premium-try-btn__arrow">-></span>}
