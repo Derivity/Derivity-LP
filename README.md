@@ -57,6 +57,12 @@ npm install
 # 2. Start development server
 npm run dev
 # → http://localhost:5173
+
+# 3. (Optional) Start backend API server
+cd backend
+npm install
+npm start
+# → http://localhost:3001
 ```
 
 ---
