@@ -47,6 +47,12 @@ For auto-restart during development:
 npm run dev   # uses nodemon
 ```
 
+Create a local env file before running:
+
+```bash
+cp .env.example .env
+```
+
 ---
 
 ## API endpoints
@@ -76,12 +82,36 @@ Content-Type: application/json
 Response:
 ```json
 {
-  "reply": "Derivity is a financial intelligence platform that unifies finance tools..."
+  "reply": "Derivity is a financial intelligence platform that unifies finance tools...",
+  "assistantMessage": {
+    "role": "assistant",
+    "content": "Derivity is a financial intelligence platform that unifies finance tools...",
+    "reasoning_details": []
+  },
+  "model": "openrouter/hunter-alpha"
 }
 ```
 
-If no match is found, a helpful fallback message is returned (HTTP 200).  
+You can also send full message history (including `reasoning_details`) to continue reasoning:
+
+```json
+{
+  "messages": [
+    { "role": "user", "content": "How many r's are in strawberry?" },
+    {
+      "role": "assistant",
+      "content": "There are 3 r's.",
+      "reasoning_details": []
+    },
+    { "role": "user", "content": "Are you sure? Think carefully." }
+  ]
+}
+```
+
 Validation errors return HTTP 400.
+OpenRouter errors return HTTP 502.
+
+If `OPENROUTER_API_KEY` is not set and you send a single `message`, the server uses the old local matcher fallback.
 
 **Example with curl:**
 ```bash
@@ -146,6 +176,11 @@ Restart the server after saving.
 |---|---|---|
 | `PORT` | `5000` | Port the server listens on |
 | `ALLOWED_ORIGIN` | `*` | CORS allowed origin (set to your frontend URL in production) |
+| `OPENROUTER_API_KEY` | _(none)_ | OpenRouter API key used by `POST /api/chat` |
+| `OPENROUTER_MODEL` | `openrouter/hunter-alpha` | Model for chat completions |
+| `OPENROUTER_TIMEOUT_MS` | `20000` | OpenRouter request timeout in milliseconds |
+| `OPENROUTER_REFERER` | _(none)_ | Optional `HTTP-Referer` header for OpenRouter |
+| `OPENROUTER_TITLE` | _(none)_ | Optional `X-Title` header for OpenRouter |
 
 ---
 
