@@ -69,7 +69,7 @@ export default function Navbar() {
 
               {/* Single CTA */}
               <div className="hidden md:flex items-center">
-                <PremiumTryButton className="!py-2.5 !px-5 !text-[13.5px]" />
+                <PremiumTryButton />
               </div>
 
               {/* Mobile hamburger */}
