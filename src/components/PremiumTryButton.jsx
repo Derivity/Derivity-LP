@@ -12,7 +12,7 @@ export default function PremiumTryButton({
     <motion.a
       href={href}
       className={`premium-try-btn ${fullWidth ? 'premium-try-btn--full' : ''} ${className}`.trim()}
-      whileHover={{ y: -4, scale: 1.018 }}
+      whileHover={{ y: -2, scale: 1.01 }}
       whileTap={{ y: 0, scale: 0.98 }}
       transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.72 }}
       {...props}
