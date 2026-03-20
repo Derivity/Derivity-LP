@@ -6,6 +6,9 @@ import Navbar from './components/Navbar'
 import Hero from './sections/Hero'
 import MarketTicker from './sections/MarketTicker'
 import MissionSection from './sections/MissionSection'
+import Products from './sections/Products'
+import AIEngine from './sections/AIEngine'
+import Features from './sections/Features'
 import CTA from './sections/CTA'
 import Footer from './sections/Footer'
 import PlatformPage from './pages/PlatformPage'
@@ -57,6 +60,9 @@ function App() {
           <Hero />
           <MarketTicker />
           <MissionSection />
+          <Products />
+          <AIEngine />
+          <Features />
           <CTA onNavigate={handleNavigate} />
           <Footer />
         </>
