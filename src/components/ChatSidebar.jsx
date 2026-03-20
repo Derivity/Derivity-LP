@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { Plus, Menu, X, MessageCircle, LayoutDashboard, Briefcase, Eye, Target, FileText } from 'lucide-react'
+import { Plus, Menu, X, MessageCircle, LayoutDashboard, Briefcase, Eye, Target, FileText, PanelLeftClose } from 'lucide-react'
 
 const MENU_ITEMS = [
   { key: 'chat', label: 'Chats', icon: MessageCircle },
@@ -10,7 +10,7 @@ const MENU_ITEMS = [
   { key: 'reports', label: 'Reports', icon: FileText },
 ]
 
-function SidebarContent({ onToggle, onNewChat, conversations, onSelectConversation, currentId, activeSection, onSectionChange, sectionMeta }) {
+function SidebarContent({ onToggle, onNewChat, conversations, onSelectConversation, currentId, activeSection, onSectionChange, sectionMeta, onDesktopToggle }) {
   const isChatSection = activeSection === 'chat'
 
   return (
@@ -24,7 +24,15 @@ function SidebarContent({ onToggle, onNewChat, conversations, onSelectConversati
       </motion.button>
 
       <div className="px-4 pt-5 pb-3 border-b border-white/[0.055]">
-        <div className="flex items-center gap-2.5">
+        <button
+          onClick={onDesktopToggle}
+          className="hidden md:flex w-full items-center justify-between rounded-lg px-2 py-2 text-gray-300 hover:text-white transition-colors duration-200"
+          title="Hide sidebar"
+        >
+          <span className="text-[11px] font-semibold tracking-[0.22em] uppercase">Derivity AI</span>
+          <PanelLeftClose className="w-4 h-4" />
+        </button>
+        <div className="md:hidden flex items-center gap-2.5">
           <img src="/logo.svg" alt="Derivity logo" className="w-16 h-8 object-contain opacity-95" />
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-gray-400">Derivity AI</span>
         </div>
@@ -129,6 +137,7 @@ export default function ChatSidebar({
   activeSection,
   onSectionChange,
   sectionMeta,
+  onDesktopToggle,
 }) {
   return (
     <>
@@ -175,6 +184,7 @@ export default function ChatSidebar({
           activeSection={activeSection}
           onSectionChange={onSectionChange}
           sectionMeta={sectionMeta}
+          onDesktopToggle={onDesktopToggle}
         />
       </div>
 
@@ -194,6 +204,7 @@ export default function ChatSidebar({
           activeSection={activeSection}
           onSectionChange={onSectionChange}
           sectionMeta={sectionMeta}
+          onDesktopToggle={onDesktopToggle}
         />
       </motion.div>
     </>

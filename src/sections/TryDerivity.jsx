@@ -1,6 +1,6 @@
 ﻿import { useState, useRef, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Send, Sparkles, RotateCcw, ArrowLeft, TrendingUp, PieChart, DollarSign, BarChart3, PanelLeft, PanelLeftClose } from "lucide-react"
+import { Send, Sparkles, RotateCcw, ArrowLeft, TrendingUp, PieChart, DollarSign, BarChart3, PanelLeft } from "lucide-react"
 import ChatSidebar from "../components/ChatSidebar"
 import { SIDEBAR_PAGE_DATA } from "../data/sidebarPagesData"
 
@@ -730,6 +730,7 @@ export default function TryDerivity({ onBack }) {
         isOpen={sidebarOpen} 
         onToggle={() => setSidebarOpen(!sidebarOpen)}
         desktopVisible={desktopSidebarVisible}
+        onDesktopToggle={() => setDesktopSidebarVisible((v) => !v)}
         onNewChat={handleNewChat}
         conversations={conversations}
         onSelectConversation={handleSelectConversation}
@@ -747,6 +748,26 @@ export default function TryDerivity({ onBack }) {
         transition={{ duration: 0.4 }}
         className={`fixed inset-0 z-[200] flex flex-col bg-black overflow-hidden ${desktopSidebarVisible ? 'md:pl-72' : 'md:pl-0'}`}
       >
+      {!desktopSidebarVisible && (
+        <motion.button
+          initial={{ opacity: 0, x: -8 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          onClick={() => setDesktopSidebarVisible(true)}
+          className="hidden md:flex fixed top-4 left-4 z-[220] items-center gap-2 px-3 py-2 rounded-lg text-gray-300 hover:text-white transition-colors duration-200"
+          style={{
+            background: "rgba(0,0,0,0.5)",
+            border: "1px solid rgba(255,255,255,0.09)",
+            backdropFilter: "blur(14px)",
+            WebkitBackdropFilter: "blur(14px)",
+          }}
+          title="Show sidebar"
+        >
+          <PanelLeft className="w-4 h-4" />
+          <span className="text-[12px] font-medium tracking-wide">Show sidebar</span>
+        </motion.button>
+      )}
+
       {/* Layered ambient background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
@@ -796,18 +817,6 @@ export default function TryDerivity({ onBack }) {
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" />
           <span className="text-[13px] font-medium tracking-wide">Back</span>
-        </motion.button>
-
-        <motion.button
-          onClick={() => setDesktopSidebarVisible((v) => !v)}
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="hidden md:flex items-center gap-2 text-gray-600 hover:text-gray-300 transition-all duration-200"
-          title={desktopSidebarVisible ? "Hide sidebar" : "Show sidebar"}
-        >
-          {desktopSidebarVisible ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
-          <span className="text-[12px] font-medium tracking-wide">{desktopSidebarVisible ? "Hide sidebar" : "Show sidebar"}</span>
         </motion.button>
 
         <motion.button
