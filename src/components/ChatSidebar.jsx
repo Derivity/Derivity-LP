@@ -105,6 +105,9 @@ export default function ChatSidebar({ isOpen, onToggle, onNewChat, conversations
 
         {/* Footer */}
         <div className="border-t border-white/[0.055] p-3 space-y-2">
+          <div className="flex justify-center">
+            <img src="/logo.svg" alt="Derivity logo" className="w-14 h-7 object-contain opacity-90" />
+          </div>
           <p className="text-[11px] text-gray-600 text-center">Derivity AI</p>
           <p className="text-[11px] text-gray-700 text-center">v0.1 — Training</p>
         </div>

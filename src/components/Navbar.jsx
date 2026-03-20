@@ -53,6 +53,14 @@ export default function Navbar({ onNavigate, currentPage }) {
             }}
           >
             <div className="max-w-7xl mx-auto px-6 h-[64px] flex items-center justify-between">
+              <button
+                onClick={() => onNavigate('home')}
+                className="flex items-center gap-2.5 text-gray-200 hover:text-white transition-colors duration-200"
+                aria-label="Go to home"
+              >
+                <img src="/logo.svg" alt="Derivity logo" className="w-8 h-4 object-contain" />
+                <span className="text-[11px] font-semibold tracking-[0.25em] uppercase">Derivity</span>
+              </button>
 
               {/* Desktop nav links */}
               <div className="hidden md:flex items-center gap-1">

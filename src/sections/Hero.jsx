@@ -70,13 +70,10 @@ export default function Hero() {
           transition={{ duration: 1.0, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           className="flex flex-col items-center gap-2 mb-8"
         >
-          <span
-            className="text-[11px] font-semibold tracking-[0.35em] uppercase"
-            style={{ color: 'rgba(167,139,250,0.45)' }}
-          >
+          <img src="/logo.svg" alt="Derivity logo" className="w-24 h-12 object-contain" />
+          <span className="text-[11px] font-semibold tracking-[0.35em] uppercase" style={{ color: 'rgba(245,245,245,0.5)' }}>
             Derivity
           </span>
-          <div className="w-8 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.35), transparent)' }} />
         </motion.div>
 
         {/* Main sentence */}

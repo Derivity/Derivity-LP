@@ -14,8 +14,8 @@ export default function Footer() {
           className="flex flex-col items-center gap-5"
         >
           {/* Wordmark */}
-          <span className="text-[11px] font-semibold tracking-[0.35em] uppercase"
-            style={{ color: 'rgba(167,139,250,0.4)' }}>
+          <img src="/logo.svg" alt="Derivity logo" className="w-20 h-10 object-contain" />
+          <span className="text-[11px] font-semibold tracking-[0.35em] uppercase" style={{ color: 'rgba(245,245,245,0.45)' }}>
             Derivity
           </span>
 
