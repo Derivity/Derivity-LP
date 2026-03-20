@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { Send, Sparkles, RotateCcw, ArrowLeft, TrendingUp, PieChart, DollarSign, BarChart3 } from "lucide-react"
 import ChatSidebar from "../components/ChatSidebar"
+import { SIDEBAR_PAGE_DATA } from "../data/sidebarPagesData"
 
 const TOPIC_RESPONSES = [
   {
@@ -563,6 +564,74 @@ const SUGGESTIONS = [
   { icon: PieChart,   text: "What are some basic investment strategies?" },
 ]
 
+function SidebarPagePanel({ pageKey }) {
+  const page = SIDEBAR_PAGE_DATA[pageKey]
+  if (!page) return null
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+      className="max-w-4xl mx-auto px-4 md:px-6 py-10"
+    >
+      <div className="mb-8">
+        <h2 className="text-[clamp(28px,4vw,40px)] font-black tracking-[-0.03em] text-white mb-2">{page.title}</h2>
+        <p className="text-gray-400 text-[15px] leading-relaxed">{page.subtitle}</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-7">
+        {page.kpis.map((kpi) => (
+          <div
+            key={kpi.label}
+            className="rounded-2xl p-5"
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              border: "1px solid rgba(139,92,246,0.16)",
+            }}
+          >
+            <p className="text-[12px] text-gray-500 mb-2">{kpi.label}</p>
+            <p className="text-[24px] font-bold text-white tracking-tight">{kpi.value}</p>
+            <p className="text-[12px] text-violet-300 mt-1">{kpi.delta}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div
+          className="rounded-2xl p-5"
+          style={{
+            background: "rgba(255,255,255,0.02)",
+            border: "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
+          <h3 className="text-white text-[15px] font-semibold mb-3">Highlights</h3>
+          <div className="space-y-2.5">
+            {page.highlights.map((item) => (
+              <p key={item} className="text-[13px] text-gray-300 leading-relaxed">{item}</p>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className="rounded-2xl p-5"
+          style={{
+            background: "rgba(255,255,255,0.02)",
+            border: "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
+          <h3 className="text-white text-[15px] font-semibold mb-3">Recommended Next Steps</h3>
+          <div className="space-y-2.5">
+            {page.actions.map((item) => (
+              <p key={item} className="text-[13px] text-gray-300 leading-relaxed">{item}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 export default function TryDerivity({ onBack }) {
   const [messages, setMessages] = useState([WELCOME_MSG])
   const [input, setInput] = useState("")
@@ -571,6 +640,7 @@ export default function TryDerivity({ onBack }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [conversations, setConversations] = useState([])
   const [currentChatId, setCurrentChatId] = useState(null)
+  const [activeSection, setActiveSection] = useState("chat")
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const textareaRef = useRef(null)
@@ -623,6 +693,7 @@ export default function TryDerivity({ onBack }) {
     setThinking(false)
     setFallbackIdx(0)
     setCurrentChatId(null)
+    setActiveSection("chat")
     setSidebarOpen(false)
   }
 
@@ -631,6 +702,7 @@ export default function TryDerivity({ onBack }) {
     if (conv) {
       setMessages(conv.messages)
       setCurrentChatId(id)
+      setActiveSection("chat")
       setSidebarOpen(false)
     }
   }
@@ -640,6 +712,15 @@ export default function TryDerivity({ onBack }) {
   }
 
   const isEmpty = messages.length === 1
+  const isChatSection = activeSection === "chat"
+  const sectionMeta = {
+    chat: conversations.length ? String(conversations.length) : undefined,
+    dashboard: "Live",
+    portfolio: "4 assets",
+    watchlist: "12",
+    goals: "3",
+    reports: "Weekly",
+  }
 
   return (
     <>
@@ -651,6 +732,9 @@ export default function TryDerivity({ onBack }) {
         conversations={conversations}
         onSelectConversation={handleSelectConversation}
         currentId={currentChatId}
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        sectionMeta={sectionMeta}
       />
 
       {/* Main chat area - full screen */}
@@ -659,7 +743,7 @@ export default function TryDerivity({ onBack }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="fixed inset-0 z-[200] flex flex-col bg-black overflow-hidden"
+        className="fixed inset-0 z-[200] md:pl-72 flex flex-col bg-black overflow-hidden"
       >
       {/* Layered ambient background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -718,10 +802,10 @@ export default function TryDerivity({ onBack }) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-center gap-1.5 text-gray-700 hover:text-gray-400 transition-colors duration-200 group"
-          title="New conversation"
+          title={isChatSection ? "New conversation" : "Back to chat"}
         >
           <RotateCcw className="w-3.5 h-3.5 group-hover:rotate-180 transition-transform duration-500" />
-          <span className="text-[12px] font-medium tracking-wide hidden sm:block">New chat</span>
+          <span className="text-[12px] font-medium tracking-wide hidden sm:block">{isChatSection ? "New chat" : "Reset"}</span>
         </motion.button>
       </div>
 
@@ -730,6 +814,7 @@ export default function TryDerivity({ onBack }) {
         className="relative z-10 flex-1 overflow-y-auto"
         style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(255,255,255,0.05) transparent" }}
       >
+        {isChatSection ? (
         <div className="max-w-2xl mx-auto px-4 md:px-6 py-8 flex flex-col gap-6">
 
           <AnimatePresence>
@@ -844,9 +929,13 @@ export default function TryDerivity({ onBack }) {
           <AnimatePresence>{thinking && <Thinking key="thinking" />}</AnimatePresence>
           <div ref={bottomRef} />
         </div>
+        ) : (
+          <SidebarPagePanel pageKey={activeSection} />
+        )}
       </div>
 
       {/* Input bar with neon glow border */}
+      {isChatSection && (
       <div className="relative z-10 flex-shrink-0 px-4 md:px-6 pb-6 pt-3 max-w-2xl mx-auto w-full">
         <div
           aria-hidden
@@ -922,6 +1011,7 @@ export default function TryDerivity({ onBack }) {
           Derivity AI · Under development · Responses are illustrative only
         </p>
       </div>
+      )}
       </motion.div>
     </>
   )
