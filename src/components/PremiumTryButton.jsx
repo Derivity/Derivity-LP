@@ -12,22 +12,14 @@ export default function PremiumTryButton({
     <motion.a
       href={href}
       className={`premium-try-btn ${fullWidth ? 'premium-try-btn--full' : ''} ${className}`.trim()}
-      whileHover={{ y: -2, scale: 1.01 }}
-      whileTap={{ y: 0, scale: 0.98 }}
-      transition={{ type: 'spring', stiffness: 320, damping: 22, mass: 0.72 }}
+      whileHover={{ y: -3, scale: 1.05 }}
+      whileTap={{ y: 0, scale: 0.95 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 20 }}
       {...props}
     >
-      <span className="premium-try-btn__halo" aria-hidden="true" />
-      <span className="premium-try-btn__surface" aria-hidden="true" />
-      <span className="premium-try-btn__liquid" aria-hidden="true" />
-      <span className="premium-try-btn__beam" aria-hidden="true" />
-      <span className="premium-try-btn__edge" aria-hidden="true" />
       <span className="premium-try-btn__label">{label}</span>
       {showArrow && (
-        <span className="premium-try-btn__icon" aria-hidden="true">
-          <span className="premium-try-btn__icon-glow" />
-          <span className="premium-try-btn__arrow">&gt;</span>
-        </span>
+        <span className="premium-try-btn__arrow" aria-hidden="true">&gt;</span>
       )}
     </motion.a>
   )
