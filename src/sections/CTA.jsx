@@ -68,24 +68,50 @@ export default function CTA({ onNavigate }) {
           </motion.a>
         </motion.div>
 
-        {/* Trust indicators */}
+        {/* How we work - meaningful content */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-6 text-[12px] text-gray-600"
+          className="mt-16 pt-12 border-t border-white/[0.08]"
         >
-          {[
-            '🔒 Bank-grade security',
-            '✦ No credit card required',
-            '⚡ Instant setup',
-            '◈ Cancel anytime',
-          ].map((item) => (
-            <span key={item} className="font-medium">
-              {item}
-            </span>
-          ))}
+          <h3 className="text-xl font-semibold text-gray-300 mb-8">How We Work</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: 'AI-First Analysis',
+                description: 'Institutional-grade financial AI that learns from market patterns, macroeconomic data, and your personal financial goals.',
+              },
+              {
+                title: 'Personalized Insights',
+                description: 'Get actionable recommendations tailored to your risk tolerance, investment timeline, and financial objectives.',
+              },
+              {
+                title: 'Continuous Learning',
+                description: 'Our AI evolves with market conditions, adapting strategies and providing real-time portfolio optimization.',
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.7 + i * 0.1, duration: 0.6 }}
+                className="flex flex-col items-start text-left p-6 rounded-xl"
+                style={{
+                  background: 'rgba(255,255,255,0.02)',
+                  border: '1px solid rgba(139,92,246,0.15)',
+                }}
+              >
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: 'rgba(139,92,246,0.1)' }}>
+                  <span className="text-lg font-bold text-violet-400">{i + 1}</span>
+                </div>
+                <h4 className="text-white font-semibold mb-2">{item.title}</h4>
+                <p className="text-sm text-gray-400 leading-relaxed">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

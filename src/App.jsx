@@ -5,6 +5,7 @@ import Lenis from 'lenis'
 import Navbar from './components/Navbar'
 import Hero from './sections/Hero'
 import MarketTicker from './sections/MarketTicker'
+import MissionSection from './sections/MissionSection'
 import CTA from './sections/CTA'
 import Footer from './sections/Footer'
 import PlatformPage from './pages/PlatformPage'
@@ -55,6 +56,7 @@ function App() {
         <>
           <Hero />
           <MarketTicker />
+          <MissionSection />
           <CTA onNavigate={handleNavigate} />
           <Footer />
         </>
