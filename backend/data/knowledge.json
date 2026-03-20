@@ -18,8 +18,8 @@
   "how does a stock work": "Companies sell shares to raise money. When you buy a share, you own a slice of that company. If the company grows, your share's value rises. You profit either by selling at a higher price or through dividends the company pays out.",
 
   "what is a mutual fund": "A mutual fund pools money from many investors to buy a diversified basket of stocks, bonds, or other assets. A professional fund manager handles the investments. It's one of the easiest ways to invest in the market without picking individual stocks.",
-  "what is sip": "SIP (Systematic Investment Plan) means investing a fixed amount every month into a mutual fund — automatically. It's like a recurring deposit, except your money goes into the market and has higher growth potential. Even ₹500/month is a great start.",
-  "how does sip work": "You choose a fixed monthly amount — even ₹500. On a fixed date each month it auto-deducts from your bank and buys units of a mutual fund. Over years, these units grow in value. ₹5,000/month for 20 years at 12% return ≈ ₹49 lakh from just ₹12 lakh invested.",
+  "what is sip": "SIP (Systematic Investment Plan) means investing a fixed amount every month into a mutual fund — automatically. It's like a recurring deposit, except your money goes into the market and has higher growth potential. Even $500/month is a great start.",
+  "how does sip work": "You choose a fixed monthly amount — even $500. On a fixed date each month it auto-deducts from your bank and buys units of a mutual fund. Over years, these units grow in value. $5,000/month for 20 years at 12% return ≈ $49 lakh from just $12 lakh invested.",
 
   "what is an index fund": "An index fund is a mutual fund that simply copies a market index like the Nifty 50. It automatically holds all 50 stocks in the index. When the index goes up, your investment goes up too. It's very low cost and has historically outperformed most actively managed funds over the long run.",
   "what is an etf": "An ETF (Exchange Traded Fund) is like an index fund but it trades on the stock exchange like a regular stock. It tracks an index or asset class, is low cost, and provides instant diversification.",
@@ -30,11 +30,11 @@
   "what is nse": "NSE (National Stock Exchange) is India's largest stock exchange by trading volume. Founded in 1992, it's fully electronic and home to the Nifty 50 index.",
   "what is bse": "BSE (Bombay Stock Exchange) is Asia's oldest stock exchange, founded in 1875. It lists over 5,000 companies and is home to the Sensex index.",
 
-  "what is nav": "NAV (Net Asset Value) is the price of one unit of a mutual fund. When you invest ₹5,000 in a fund with a NAV of ₹50, you get 100 units. When NAV rises to ₹70, your investment is worth ₹7,000. NAV is updated once a day after market hours.",
+  "what is nav": "NAV (Net Asset Value) is the price of one unit of a mutual fund. When you invest $5,000 in a fund with a NAV of $50, you get 100 units. When NAV rises to $70, your investment is worth $7,000. NAV is updated once a day after market hours.",
 
-  "what is compounding": "Compounding means your money earns returns, and then those returns also earn returns. Example: ₹1,00,000 at 12%/year → ₹3,10,000 after 10 years and ₹9,64,000 after 20 years — without adding another rupee. Starting early is the key to maximising compounding.",
+  "what is compounding": "Compounding means your money earns returns, and then those returns also earn returns. Example: $1,00,000 at 12%/year → $3,10,000 after 10 years and $9,64,000 after 20 years — without adding another dollar. Starting early is the key to maximising compounding.",
   "what is compound interest": "Compound interest means you earn interest on your principal AND on previously earned interest. Over time this creates exponential growth. Starting at 22 vs 32 can mean having 3x more money at retirement, purely due to those extra 10 years of compounding.",
-  "power of compounding": "Compounding is when your returns earn more returns. ₹1,00,000 invested at 12% grows to ₹9,64,000 in 20 years without adding any more money. Time is the biggest advantage — start investing as early as possible.",
+  "power of compounding": "Compounding is when your returns earn more returns. $1,00,000 invested at 12% grows to $9,64,000 in 20 years without adding any more money. Time is the biggest advantage — start investing as early as possible.",
 
   "what is inflation": "Inflation means prices rise over time — so the same money buys less in the future. India's average inflation is roughly 5–6%. If your savings account earns 3% and inflation is 6%, you're losing purchasing power. Investing in equities (which historically return 12–15%) helps you outpace inflation.",
 
@@ -42,16 +42,16 @@
 
   "what is dollar cost averaging": "Dollar-Cost Averaging (DCA) means investing a fixed amount every month regardless of market conditions. When prices are low you buy more units. When prices are high you buy fewer. Over time your average cost stays low — this is exactly how a SIP works.",
 
-  "what is a bond": "A bond is a loan you give to a government or company. They pay you interest in return. Example: you lend ₹10,000 to the government for 5 years at 7% — they pay ₹700/year and return your ₹10,000 at the end. Bonds are lower risk than stocks but offer lower returns.",
+  "what is a bond": "A bond is a loan you give to a government or company. They pay you interest in return. Example: you lend $10,000 to the government for 5 years at 7% — they pay $700/year and return your $10,000 at the end. Bonds are lower risk than stocks but offer lower returns.",
   "what are bonds": "Bonds are debt instruments where you lend money to a government or company and earn fixed interest. They are lower risk than stocks, provide stable income, and are used as a safety cushion in a portfolio.",
 
-  "what is a fixed deposit": "A Fixed Deposit (FD) is a bank product where you deposit money for a fixed term and earn a guaranteed interest rate (currently ~6–7.5%). It is completely safe for amounts up to ₹5 lakh (government insured). FDs are great for safety but may not beat inflation over the long term.",
+  "what is a fixed deposit": "A Fixed Deposit (FD) is a bank product where you deposit money for a fixed term and earn a guaranteed interest rate (currently ~6–7.5%). It is completely safe for amounts up to $5 lakh (government insured). FDs are great for safety but may not beat inflation over the long term.",
   "what is fd": "FD (Fixed Deposit) is when you park money with a bank for a set period at a guaranteed interest rate. It is very safe, but interest is taxed as income, so real post-tax returns can be low. Best for short-term goals or as part of an emergency fund.",
 
   "what is ppf": "PPF (Public Provident Fund) is a government-backed savings scheme that earns ~7.1% interest — completely tax-free. It has a 15-year lock-in and is one of the safest long-term savings options in India.",
-  "what is elss": "ELSS (Equity Linked Savings Scheme) is a type of mutual fund that invests in equities with a 3-year lock-in. It qualifies for ₹1.5 lakh tax deduction under Section 80C and has historically returned 12–15% — making it the best combination of tax saving and wealth creation.",
-  "what is nps": "NPS (National Pension System) is a government retirement savings scheme. It builds a retirement corpus and gives an additional ₹50,000 tax deduction beyond the normal ₹1.5 lakh 80C limit.",
-  "what is tax saving investment": "Tax-saving investments reduce your taxable income and grow your money. The main options are PPF (safe, tax-free), ELSS (mutual fund, highest returns), and NPS (retirement-focused). You can save up to ₹1.5 lakh of taxable income using these under Section 80C.",
+  "what is elss": "ELSS (Equity Linked Savings Scheme) is a type of mutual fund that invests in equities with a 3-year lock-in. It qualifies for $1.5 lakh tax deduction under Section 80C and has historically returned 12–15% — making it the best combination of tax saving and wealth creation.",
+  "what is nps": "NPS (National Pension System) is a government retirement savings scheme. It builds a retirement corpus and gives an additional $50,000 tax deduction beyond the normal $1.5 lakh 80C limit.",
+  "what is tax saving investment": "Tax-saving investments reduce your taxable income and grow your money. The main options are PPF (safe, tax-free), ELSS (mutual fund, highest returns), and NPS (retirement-focused). You can save up to $1.5 lakh of taxable income using these under Section 80C.",
 
   "what is a bull market": "A bull market means the stock market is going up — prices are rising, the economy is doing well, and people are optimistic. Best strategy: stay invested and let your money grow.",
   "what is a bear market": "A bear market means the stock market is falling, typically by 20% or more. People get fearful. But historically, every bear market ends and markets recover. Best strategy: don't panic-sell. Keep your SIPs running — you're buying at lower prices.",
@@ -65,7 +65,7 @@
   "what is gold investment": "Gold is a classic safe-haven asset that often rises when stocks fall. Best ways to invest: Sovereign Gold Bond (earns gold returns + 2.5% interest/year, tax-free after 8 years), Gold ETF (easy to buy/sell), or digital gold. Hold ~10% of your portfolio in gold as insurance.",
   "what is a sovereign gold bond": "A Sovereign Gold Bond (SGB) is issued by the Indian government and gives you gold price returns plus 2.5% annual interest. It's completely tax-free if held to maturity (8 years) and is the best way to invest in gold.",
 
-  "what is real estate investing": "Real estate involves buying property to earn rental income or capital appreciation. Pros: physical asset, rental income. Cons: illiquid, expensive, large loans. Consider REITs (Real Estate Investment Trusts) as a simpler alternative — invest from ₹10,000–15,000 in commercial properties listed on the stock exchange.",
+  "what is real estate investing": "Real estate involves buying property to earn rental income or capital appreciation. Pros: physical asset, rental income. Cons: illiquid, expensive, large loans. Consider REITs (Real Estate Investment Trusts) as a simpler alternative — invest from $10,000–15,000 in commercial properties listed on the stock exchange.",
 
   "what is cryptocurrency": "Cryptocurrency is digital money not issued or controlled by any government — Bitcoin and Ethereum are the most well-known. It can grow a lot, but can also drop 50–80% very quickly. Keep crypto to 5–10% max of your portfolio, and never invest money you can't afford to lose entirely.",
 
@@ -77,14 +77,14 @@
   "what is a p/e ratio": "P/E Ratio (Price-to-Earnings) = Stock Price ÷ Earnings per Share. It tells you if a stock is expensive relative to what the company earns. Below 15 = potentially cheap. 15–25 = fair value. Above 30 = expensive. Use it alongside other metrics, not in isolation.",
   "what is fundamental analysis": "Fundamental analysis is evaluating a company's financials, management, and industry to decide if its stock is a good investment. Key metrics include P/E ratio, revenue growth, profit margins, and debt levels.",
 
-  "what is a dividend": "A dividend is when a company shares part of its profit with shareholders. Example: you own 100 shares, company pays ₹5 dividend/share — you receive ₹500 in your account without selling anything. Dividends are taxed as regular income.",
+  "what is a dividend": "A dividend is when a company shares part of its profit with shareholders. Example: you own 100 shares, company pays $5 dividend/share — you receive $500 in your account without selling anything. Dividends are taxed as regular income.",
 
   "what is a credit score": "Your credit score (CIBIL score) is a number between 300–900 showing banks how trustworthy you are with money. 750–900 is excellent. Below 650 needs improvement. Improve it by paying bills on time, keeping credit card usage below 30% of your limit, and avoiding too many loan applications.",
 
   "what is savings rate": "Savings rate is the percentage of your income you save each month. A good target is 20% of your income. The 50/30/20 rule: 50% on needs, 30% on wants, 20% on savings and investments. Transfer savings on the day your salary arrives — before you spend it.",
 
-  "how do i start investing": "Start in 3 steps: (1) Build a 3–6 month emergency fund in a liquid mutual fund. (2) Set up a Nifty 50 index fund SIP for as little as ₹500/month on Groww or Zerodha. (3) Stay consistent and don't panic during market dips. Time and consistency matter more than the amount.",
-  "how to invest with small money": "Start with a SIP in a Nifty 50 index fund for as little as ₹500/month. You don't need a large amount — you need consistency and time. Even ₹1,000/month for 20 years at 12% return grows to nearly ₹10 lakh.",
+  "how do i start investing": "Start in 3 steps: (1) Build a 3–6 month emergency fund in a liquid mutual fund. (2) Set up a Nifty 50 index fund SIP for as little as $500/month on Groww or Zerodha. (3) Stay consistent and don't panic during market dips. Time and consistency matter more than the amount.",
+  "how to invest with small money": "Start with a SIP in a Nifty 50 index fund for as little as $500/month. You don't need a large amount — you need consistency and time. Even $1,000/month for 20 years at 12% return grows to nearly $10 lakh.",
 
   "what is a portfolio": "A portfolio is the total collection of all your investments — stocks, mutual funds, gold, bonds, FDs, etc. A good portfolio is diversified across asset classes to balance growth and safety.",
 

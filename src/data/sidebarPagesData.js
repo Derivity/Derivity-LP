@@ -3,8 +3,8 @@ export const SIDEBAR_PAGE_DATA = {
     title: 'Financial Command Center',
     subtitle: 'Live overview of your accounts, cash flow, and market exposure.',
     kpis: [
-      { label: 'Net Worth', value: 'Rs 42.8L', delta: '+2.1% this month' },
-      { label: 'Monthly Savings', value: 'Rs 78,000', delta: 'Target: Rs 75,000' },
+      { label: 'Net Worth', value: '$42.8L', delta: '+2.1% this month' },
+      { label: 'Monthly Savings', value: '$78,000', delta: 'Target: $75,000' },
       { label: 'Debt Ratio', value: '18%', delta: 'Healthy range' },
     ],
     highlights: [
@@ -61,12 +61,12 @@ export const SIDEBAR_PAGE_DATA = {
     subtitle: 'Progress tracking for retirement, home fund, and education.',
     kpis: [
       { label: 'Retirement Goal', value: '34% funded', delta: 'On track' },
-      { label: 'Home Downpayment', value: 'Rs 11.2L', delta: '68% funded' },
-      { label: 'Education Corpus', value: 'Rs 6.5L', delta: 'Ahead by 3 months' },
+      { label: 'Home Downpayment', value: '$11.2L', delta: '68% funded' },
+      { label: 'Education Corpus', value: '$6.5L', delta: 'Ahead by 3 months' },
     ],
     highlights: [
       'Current SIP pace supports retirement target by age 50.',
-      'Home goal can be accelerated by adding Rs 8,000 monthly.',
+      'Home goal can be accelerated by adding $8,000 monthly.',
       'Education fund projection assumes 9% return and 7% inflation.',
     ],
     actions: [
