@@ -18,9 +18,6 @@ export default function PremiumTryButton({
       {...props}
     >
       <span className="premium-try-btn__label">{label}</span>
-      {showArrow && (
-        <span className="premium-try-btn__arrow" aria-hidden="true">&gt;</span>
-      )}
     </motion.a>
   )
 }
