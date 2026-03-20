@@ -3,15 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion'
 import PremiumTryButton from './PremiumTryButton'
 
 const navLinks = [
-  { label: 'Platform', href: '#products' },
-  { label: 'AI Engine', href: '#ai-engine' },
-  { label: 'Features', href: '#features' },
+  { label: 'Platform', href: 'platform' },
+  { label: 'AI Engine', href: 'ai-engine' },
+  { label: 'Features', href: 'features' },
 ]
 
 // Threshold (px) before the bar slides in
 const SHOW_AT = 60
 
-export default function Navbar() {
+export default function Navbar({ onNavigate, currentPage }) {
   const [visible, setVisible] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [blurAmount, setBlurAmount] = useState(0)
@@ -57,13 +57,17 @@ export default function Navbar() {
               {/* Desktop nav links */}
               <div className="hidden md:flex items-center gap-1">
                 {navLinks.map((link) => (
-                  <a
+                  <button
                     key={link.label}
-                    href={link.href}
-                    className="px-4 py-2 text-[13.5px] text-gray-400 hover:text-white transition-colors duration-200 font-medium rounded-lg hover:bg-white/[0.04]"
+                    onClick={() => onNavigate(link.href)}
+                    className={`px-4 py-2 text-[13.5px] transition-colors duration-200 font-medium rounded-lg ${
+                      currentPage === link.href
+                        ? 'text-white bg-white/[0.08]'
+                        : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
+                    }`}
                   >
                     {link.label}
-                  </a>
+                  </button>
                 ))}
               </div>
 
@@ -98,17 +102,21 @@ export default function Navbar() {
             className="fixed top-[64px] left-0 right-0 z-40 bg-black/95 backdrop-blur-2xl border-b border-white/[0.06] px-6 py-4"
           >
             {navLinks.map((link, i) => (
-              <motion.a
+              <motion.button
                 key={link.label}
-                href={link.href}
+                onClick={() => {
+                  onNavigate(link.href)
+                  setMenuOpen(false)
+                }}
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="block py-3.5 text-[15px] text-gray-300 hover:text-white transition-colors font-medium border-b border-white/[0.045] last:border-0"
-                onClick={() => setMenuOpen(false)}
+                className={`block w-full text-left py-3.5 text-[15px] transition-colors font-medium border-b border-white/[0.045] last:border-0 ${
+                  currentPage === link.href ? 'text-white' : 'text-gray-300 hover:text-white'
+                }`}
               >
                 {link.label}
-              </motion.a>
+              </motion.button>
             ))}
             <div className="pt-4">
               <PremiumTryButton

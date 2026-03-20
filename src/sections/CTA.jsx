@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import ParticleNetwork from '../components/ParticleNetwork'
 import PremiumTryButton from '../components/PremiumTryButton'
 
-export default function CTA() {
+export default function CTA({ onNavigate }) {
   return (
     <section id="cta" className="relative bg-black py-32 md:py-44 overflow-hidden">
       {/* Gradient background */}
