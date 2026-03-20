@@ -4,12 +4,12 @@ import { Plus, Menu, X, Trash2, MessageCircle } from 'lucide-react'
 export default function ChatSidebar({ isOpen, onToggle, onNewChat, conversations = [], onSelectConversation, currentId }) {
   return (
     <>
-      {/* Mobile hamburger button */}
+      {/* Mobile hamburger button - top left */}
       <motion.button
         onClick={onToggle}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="md:hidden fixed bottom-24 left-6 z-[150] w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200"
+        className="md:hidden fixed top-6 left-6 z-[150] w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200"
         style={{
           background: 'rgba(255,255,255,0.08)',
           border: '1px solid rgba(139,92,246,0.2)',
@@ -41,7 +41,7 @@ export default function ChatSidebar({ isOpen, onToggle, onNewChat, conversations
         initial={{ x: '-100%' }}
         animate={{ x: isOpen ? 0 : '-100%' }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed md:relative w-64 h-screen bg-black/60 backdrop-blur-lg border-r border-white/[0.055] flex flex-col z-[200] md:z-0"
+        className="fixed md:hidden w-64 h-screen bg-black/80 backdrop-blur-xl border-r border-white/[0.055] flex flex-col z-[200]"
       >
         {/* Close button (mobile only) */}
         <motion.button

@@ -642,8 +642,8 @@ export default function TryDerivity({ onBack }) {
   const isEmpty = messages.length === 1
 
   return (
-    <div className="fixed inset-0 z-[200] flex bg-black overflow-hidden">
-      {/* Chat Sidebar */}
+    <>
+      {/* Chat Sidebar - completely separate */}
       <ChatSidebar 
         isOpen={sidebarOpen} 
         onToggle={() => setSidebarOpen(!sidebarOpen)}
@@ -653,13 +653,13 @@ export default function TryDerivity({ onBack }) {
         currentId={currentChatId}
       />
 
-      {/* Main chat area */}
+      {/* Main chat area - full screen */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="flex-1 flex flex-col bg-black overflow-hidden"
+        className="fixed inset-0 z-[200] flex flex-col bg-black overflow-hidden"
       >
       {/* Layered ambient background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -923,6 +923,6 @@ export default function TryDerivity({ onBack }) {
         </p>
       </div>
       </motion.div>
-    </div>
+    </>
   )
 }
