@@ -1,6 +1,7 @@
 ﻿import { useState, useRef, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Send, Sparkles, RotateCcw, ArrowLeft, TrendingUp, PieChart, DollarSign, BarChart3 } from "lucide-react"
+import ChatSidebar from "../components/ChatSidebar"
 
 const TOPIC_RESPONSES = [
   {
@@ -567,6 +568,9 @@ export default function TryDerivity({ onBack }) {
   const [input, setInput] = useState("")
   const [thinking, setThinking] = useState(false)
   const [fallbackIdx, setFallbackIdx] = useState(0)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [conversations, setConversations] = useState([])
+  const [currentChatId, setCurrentChatId] = useState(null)
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const textareaRef = useRef(null)
@@ -605,23 +609,58 @@ export default function TryDerivity({ onBack }) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send() }
   }
 
-  const reset = () => {
+  const handleNewChat = () => {
+    // Save current chat if it has more than welcome message
+    if (messages.length > 1) {
+      const firstUserMsg = messages.find(m => m.role === "user")
+      const title = firstUserMsg?.text.slice(0, 40) || "New conversation"
+      setConversations(prev => [{ id: Date.now(), title, messages }, ...prev])
+    }
+    
+    // Reset to new chat
     setMessages([WELCOME_MSG])
     setInput("")
     setThinking(false)
     setFallbackIdx(0)
+    setCurrentChatId(null)
+    setSidebarOpen(false)
+  }
+
+  const handleSelectConversation = (id) => {
+    const conv = conversations.find(c => c.id === id)
+    if (conv) {
+      setMessages(conv.messages)
+      setCurrentChatId(id)
+      setSidebarOpen(false)
+    }
+  }
+
+  const reset = () => {
+    handleNewChat()
   }
 
   const isEmpty = messages.length === 1
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-      className="fixed inset-0 z-[200] flex flex-col bg-black overflow-hidden"
-    >
+    <div className="fixed inset-0 z-[200] flex bg-black overflow-hidden">
+      {/* Chat Sidebar */}
+      <ChatSidebar 
+        isOpen={sidebarOpen} 
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
+        onNewChat={handleNewChat}
+        conversations={conversations}
+        onSelectConversation={handleSelectConversation}
+        currentId={currentChatId}
+      />
+
+      {/* Main chat area */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.4 }}
+        className="flex-1 flex flex-col bg-black overflow-hidden"
+      >
       {/* Layered ambient background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/20 to-transparent" />
@@ -883,6 +922,7 @@ export default function TryDerivity({ onBack }) {
           Derivity AI · Under development · Responses are illustrative only
         </p>
       </div>
-    </motion.div>
+      </motion.div>
+    </div>
   )
 }
