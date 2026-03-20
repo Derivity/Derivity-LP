@@ -121,6 +121,7 @@ function SidebarContent({ onToggle, onNewChat, conversations, onSelectConversati
 export default function ChatSidebar({
   isOpen,
   onToggle,
+  desktopVisible,
   onNewChat,
   conversations = [],
   onSelectConversation,
@@ -164,7 +165,7 @@ export default function ChatSidebar({
       </AnimatePresence>
 
       {/* Desktop sidebar */}
-      <div className="hidden md:flex fixed top-0 left-0 w-72 h-screen bg-black/88 backdrop-blur-xl border-r border-white/[0.06] flex-col z-[210]">
+      <div className={`${desktopVisible ? 'hidden md:flex' : 'hidden'} fixed top-0 left-0 w-72 h-screen bg-black/88 backdrop-blur-xl border-r border-white/[0.06] flex-col z-[210]`}>
         <SidebarContent
           onToggle={() => {}}
           onNewChat={onNewChat}

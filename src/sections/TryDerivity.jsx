@@ -1,6 +1,6 @@
 ﻿import { useState, useRef, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Send, Sparkles, RotateCcw, ArrowLeft, TrendingUp, PieChart, DollarSign, BarChart3 } from "lucide-react"
+import { Send, Sparkles, RotateCcw, ArrowLeft, TrendingUp, PieChart, DollarSign, BarChart3, PanelLeft, PanelLeftClose } from "lucide-react"
 import ChatSidebar from "../components/ChatSidebar"
 import { SIDEBAR_PAGE_DATA } from "../data/sidebarPagesData"
 
@@ -638,6 +638,7 @@ export default function TryDerivity({ onBack }) {
   const [thinking, setThinking] = useState(false)
   const [fallbackIdx, setFallbackIdx] = useState(0)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [desktopSidebarVisible, setDesktopSidebarVisible] = useState(true)
   const [conversations, setConversations] = useState([])
   const [currentChatId, setCurrentChatId] = useState(null)
   const [activeSection, setActiveSection] = useState("chat")
@@ -728,6 +729,7 @@ export default function TryDerivity({ onBack }) {
       <ChatSidebar 
         isOpen={sidebarOpen} 
         onToggle={() => setSidebarOpen(!sidebarOpen)}
+        desktopVisible={desktopSidebarVisible}
         onNewChat={handleNewChat}
         conversations={conversations}
         onSelectConversation={handleSelectConversation}
@@ -743,7 +745,7 @@ export default function TryDerivity({ onBack }) {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4 }}
-        className="fixed inset-0 z-[200] md:pl-72 flex flex-col bg-black overflow-hidden"
+        className={`fixed inset-0 z-[200] flex flex-col bg-black overflow-hidden ${desktopSidebarVisible ? 'md:pl-72' : 'md:pl-0'}`}
       >
       {/* Layered ambient background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -794,6 +796,18 @@ export default function TryDerivity({ onBack }) {
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-200" />
           <span className="text-[13px] font-medium tracking-wide">Back</span>
+        </motion.button>
+
+        <motion.button
+          onClick={() => setDesktopSidebarVisible((v) => !v)}
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="hidden md:flex items-center gap-2 text-gray-600 hover:text-gray-300 transition-all duration-200"
+          title={desktopSidebarVisible ? "Hide sidebar" : "Show sidebar"}
+        >
+          {desktopSidebarVisible ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
+          <span className="text-[12px] font-medium tracking-wide">{desktopSidebarVisible ? "Hide sidebar" : "Show sidebar"}</span>
         </motion.button>
 
         <motion.button
