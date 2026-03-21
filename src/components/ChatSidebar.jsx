@@ -32,8 +32,7 @@ function SidebarContent({ onToggle, onNewChat, conversations, onSelectConversati
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase">Derivity AI</span>
           <PanelLeftClose className="w-4 h-4" />
         </button>
-        <div className="md:hidden flex items-center gap-2.5">
-          <img src="/logo.svg" alt="Derivity logo" className="w-16 h-8 object-contain opacity-95" />
+        <div className="md:hidden flex items-center">
           <span className="text-[11px] font-semibold tracking-[0.22em] uppercase text-gray-400">Derivity AI</span>
         </div>
       </div>

@@ -11,10 +11,9 @@ export default function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col items-center gap-5"
+          className="flex flex-col items-center gap-3"
         >
           {/* Wordmark */}
-          <img src="/logo.svg" alt="Derivity logo" className="w-20 h-10 object-contain" />
           <span className="text-[11px] font-semibold tracking-[0.35em] uppercase" style={{ color: 'rgba(245,245,245,0.45)' }}>
             Derivity
           </span>

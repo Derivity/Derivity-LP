@@ -68,9 +68,8 @@ export default function Hero() {
           initial={{ opacity: 0, y: 8, filter: 'blur(6px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 1.0, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center gap-2 mb-8"
+          className="flex flex-col items-center mb-8"
         >
-          <img src="/logo.svg" alt="Derivity logo" className="w-24 h-12 object-contain" />
           <span className="text-[11px] font-semibold tracking-[0.35em] uppercase" style={{ color: 'rgba(245,245,245,0.5)' }}>
             Derivity
           </span>

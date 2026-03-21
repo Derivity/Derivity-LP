@@ -58,7 +58,6 @@ export default function Navbar({ onNavigate, currentPage }) {
                 className="flex items-center gap-2.5 text-gray-200 hover:text-white transition-colors duration-200"
                 aria-label="Go to home"
               >
-                <img src="/logo.svg" alt="Derivity logo" className="w-8 h-4 object-contain" />
                 <span className="text-[11px] font-semibold tracking-[0.25em] uppercase">Derivity</span>
               </button>
 

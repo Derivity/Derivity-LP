@@ -3,7 +3,7 @@ export const SIDEBAR_PAGE_DATA = {
     title: 'Financial Command Center',
     subtitle: 'Live overview of your accounts, cash flow, and market exposure.',
     kpis: [
-      { label: 'Net Worth', value: '$42.8L', delta: '+2.1% this month' },
+      { label: 'Net Worth', value: '$4.28M', delta: '+2.1% this month' },
       { label: 'Monthly Savings', value: '$78,000', delta: 'Target: $75,000' },
       { label: 'Debt Ratio', value: '18%', delta: 'Healthy range' },
     ],
@@ -61,8 +61,8 @@ export const SIDEBAR_PAGE_DATA = {
     subtitle: 'Progress tracking for retirement, home fund, and education.',
     kpis: [
       { label: 'Retirement Goal', value: '34% funded', delta: 'On track' },
-      { label: 'Home Downpayment', value: '$11.2L', delta: '68% funded' },
-      { label: 'Education Corpus', value: '$6.5L', delta: 'Ahead by 3 months' },
+      { label: 'Home Downpayment', value: '$1.12M', delta: '68% funded' },
+      { label: 'Education Corpus', value: '$0.65M', delta: 'Ahead by 3 months' },
     ],
     highlights: [
       'Current SIP pace supports retirement target by age 50.',
