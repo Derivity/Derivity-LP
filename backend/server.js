@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const chatRouter = require('./routes/chat');
 const faqRouter = require('./routes/faq');
+const { config } = require('./services/config');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,7 +29,11 @@ app.use(express.json({ limit: '10kb' }));
 // ── Routes ─────────────────────────────────────────────────────────────────
 
 app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok' });
+  res.json({
+    status: 'ok',
+    env: config.appEnv,
+    defaultModel: config.defaultModel,
+  });
 });
 
 app.use('/api/chat', chatRouter);
@@ -55,4 +60,8 @@ app.listen(PORT, () => {
   console.log(`  GET  /api/health`);
   console.log(`  GET  /api/faq`);
   console.log(`  POST /api/chat`);
+  console.log(`  POST /api/chat/finance/calc`);
+  console.log(`  GET  /api/chat/market`);
+  console.log(`  POST /api/chat/ingest`);
+  console.log(`  GET  /api/chat/retrieve`);
 });
