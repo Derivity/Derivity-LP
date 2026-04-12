@@ -28,6 +28,22 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.post('/structured', async (req, res) => {
+  try {
+    const sessionId = req.header('x-session-id') || req.body?.sessionId || 'default-session';
+    const result = await runFinanceQuery({
+      body: { ...req.body, responseFormat: 'json' },
+      sessionId,
+    });
+    return res.json(result);
+  } catch (error) {
+    return res.status(400).json({
+      error: 'Failed to process structured finance query.',
+      details: error.message,
+    });
+  }
+});
+
 router.post('/finance/calc', (req, res) => {
   const { type, payload } = req.body || {};
   try {

@@ -1,0 +1,17 @@
+[
+  {
+    "id": "sip-plan-basic",
+    "taskType": "sip_plan",
+    "prompt": "Create a SIP plan for 10 years with 5000 monthly and 12% assumed return."
+  },
+  {
+    "id": "market-brief-btc",
+    "taskType": "market_brief",
+    "prompt": "Give me today's market brief for BTC and risks."
+  },
+  {
+    "id": "portfolio-risk",
+    "taskType": "portfolio_risk",
+    "prompt": "Assess risk for a portfolio with 70% NVDA and 30% cash."
+  }
+]

@@ -1,8 +1,12 @@
-﻿import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Send, Sparkles, RotateCcw, ArrowLeft, TrendingUp, PieChart, DollarSign, BarChart3, PanelLeft } from "lucide-react"
+import ReactMarkdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import ChatSidebar from "../components/ChatSidebar"
 import { SIDEBAR_PAGE_DATA } from "../data/sidebarPagesData"
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 
 const TOPIC_RESPONSES = [
   {
@@ -405,22 +409,57 @@ function useTypewriter(text, speed = 14) {
   return displayed
 }
 
-function formatMessage(text) {
-  // Split into lines and render bold (**text**) and bullets
-  return text.split("\n").map((line, i) => {
-    // Bold spans
-    const parts = line.split(/(\*\*[^*]+\*\*)/g).map((part, j) =>
-      part.startsWith("**") && part.endsWith("**")
-        ? <strong key={j} className="text-white font-semibold">{part.slice(2, -2)}</strong>
-        : part
-    )
-    const isBullet = line.trimStart().startsWith("•")
+const markdownComponents = {
+  h1: ({ children }) => <h1 className="mt-5 mb-3 text-2xl font-black tracking-[-0.03em] text-white">{children}</h1>,
+  h2: ({ children }) => <h2 className="mt-5 mb-2 text-[1.15rem] font-bold tracking-[-0.02em] text-white">{children}</h2>,
+  h3: ({ children }) => <h3 className="mt-4 mb-2 text-[1.02rem] font-semibold text-white">{children}</h3>,
+  p: ({ children }) => <p className="mb-3 last:mb-0 leading-[1.75] text-gray-200">{children}</p>,
+  ul: ({ children }) => <ul className="my-3 ml-5 list-disc space-y-1.5 text-gray-200">{children}</ul>,
+  ol: ({ children }) => <ol className="my-3 ml-5 list-decimal space-y-1.5 text-gray-200">{children}</ol>,
+  li: ({ children }) => <li className="pl-1 leading-[1.7]">{children}</li>,
+  blockquote: ({ children }) => (
+    <blockquote className="my-4 rounded-2xl border border-violet-500/20 bg-white/5 px-4 py-3 text-gray-200">
+      {children}
+    </blockquote>
+  ),
+  table: ({ children }) => (
+    <div className="my-4 overflow-x-auto rounded-2xl border border-white/10 bg-white/[0.03]">
+      <table className="min-w-full border-collapse text-left text-[13px] text-gray-200">{children}</table>
+    </div>
+  ),
+  thead: ({ children }) => <thead className="bg-white/[0.05] text-gray-100">{children}</thead>,
+  tbody: ({ children }) => <tbody>{children}</tbody>,
+  tr: ({ children }) => <tr className="border-b border-white/8 last:border-b-0">{children}</tr>,
+  th: ({ children }) => <th className="px-4 py-3 font-semibold text-white">{children}</th>,
+  td: ({ children }) => <td className="px-4 py-3 align-top text-gray-200">{children}</td>,
+  a: ({ children, href }) => (
+    <a href={href} className="text-violet-300 underline decoration-violet-400/40 underline-offset-4" target="_blank" rel="noreferrer">
+      {children}
+    </a>
+  ),
+  code: ({ inline, className, children, ...props }) => {
+    if (inline) {
+      return (
+        <code className="rounded-md border border-white/10 bg-white/[0.05] px-1.5 py-0.5 font-mono text-[0.9em] text-violet-200" {...props}>
+          {children}
+        </code>
+      )
+    }
     return (
-      <span key={i} className={`block ${isBullet ? "pl-2" : ""} ${i > 0 && !isBullet && line.trim() !== "" ? "mt-3" : i > 0 && line.trim() === "" ? "mt-1" : ""}`}>
-        {parts}
-      </span>
+      <code className={`block overflow-x-auto rounded-2xl border border-white/10 bg-black/40 p-4 font-mono text-[13px] leading-7 text-gray-100 ${className || ""}`} {...props}>
+        {children}
+      </code>
     )
-  })
+  },
+  pre: ({ children }) => <pre className="my-4 overflow-x-auto rounded-2xl border border-white/10 bg-black/40">{children}</pre>,
+}
+
+function MarkdownMessage({ content }) {
+  return (
+    <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+      {content}
+    </ReactMarkdown>
+  )
 }
 
 function AssistantBubble({ text, animate }) {
@@ -431,18 +470,18 @@ function AssistantBubble({ text, animate }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="flex items-start gap-4 max-w-3xl"
+      className="flex items-start gap-4 w-full max-w-[min(54rem,92%)]"
     >
       <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-violet-600 to-blue-500 flex items-center justify-center mt-0.5 shadow-lg shadow-violet-900/40">
         <Sparkles className="w-3.5 h-3.5 text-white" />
       </div>
-      <div className="flex-1 pt-1">
-        <p className="text-[15px] text-gray-200 leading-[1.75]">
-          {formatMessage(content)}
+      <div className="flex-1 min-w-0 pt-1">
+        <div className="text-[15px] text-gray-200 leading-[1.75] break-words">
+          <MarkdownMessage content={content} />
           {animate && content.length < text.length && (
             <span className="inline-block w-0.5 h-4 bg-violet-400 ml-0.5 animate-pulse align-middle" />
           )}
-        </p>
+        </div>
       </div>
     </motion.div>
   )
@@ -457,7 +496,7 @@ function UserBubble({ text }) {
       className="flex justify-end"
     >
       <div
-        className="max-w-[72%] rounded-2xl rounded-tr-sm px-5 py-3.5 text-[15px] leading-[1.7] text-white"
+        className="max-w-[78%] rounded-2xl rounded-tr-sm px-5 py-3.5 text-[15px] leading-[1.7] text-white"
         style={{
           background: "linear-gradient(135deg, rgba(109,40,217,0.45), rgba(37,99,235,0.45))",
           border: "1px solid rgba(139,92,246,0.22)",
@@ -645,6 +684,7 @@ export default function TryDerivity({ onBack }) {
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const textareaRef = useRef(null)
+  const sessionIdRef = useRef(`web-${Date.now()}`)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -661,19 +701,102 @@ export default function TryDerivity({ onBack }) {
     if (textareaRef.current) textareaRef.current.style.height = "auto"
     setMessages((prev) => [...prev, { id: Date.now(), role: "user", text: msg }])
     setThinking(true)
-    setTimeout(() => {
-      const stockMatch = detectStockQuery(msg)
-      if (stockMatch) {
-        setMessages((prev) => [...prev, { id: Date.now() + 1, role: "widget", symbol: stockMatch.symbol, label: stockMatch.label }])
+    ;(async () => {
+      try {
+        if (msg.startsWith("/market ")) {
+          const q = msg.replace("/market ", "").trim()
+          const marketRes = await fetch(`${API_BASE_URL}/api/chat/market?q=${encodeURIComponent(q)}`)
+          if (!marketRes.ok) throw new Error(`Market API failed (${marketRes.status})`)
+          const marketData = await marketRes.json()
+          const s = marketData?.snapshot
+          const marketText = `**Market Snapshot**\n• ${s?.symbol || "N/A"}\n• Price: ${s?.price ?? "N/A"} ${s?.currency || ""}\n• 24h change: ${s?.change24hPct ?? "N/A"}`
+          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: marketText }])
+          return
+        }
+        if (msg.startsWith("/retrieve ")) {
+          const q = msg.replace("/retrieve ", "").trim()
+          const retRes = await fetch(`${API_BASE_URL}/api/chat/retrieve?q=${encodeURIComponent(q)}`)
+          if (!retRes.ok) throw new Error(`Retrieve API failed (${retRes.status})`)
+          const retData = await retRes.json()
+          const textLines = (retData?.hits || []).map((h) => `• ${h.title || h.id}: ${String(h.content || "").slice(0, 140)}...`)
+          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: `**Retrieved Documents**\n${textLines.join("\n") || "No matching documents."}` }])
+          return
+        }
+        if (msg.startsWith("/ingest ")) {
+          const content = msg.replace("/ingest ", "").trim()
+          const ingRes = await fetch(`${API_BASE_URL}/api/chat/ingest`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: "Manual note", content, source: "chat-ui" }),
+          })
+          if (!ingRes.ok) throw new Error(`Ingest API failed (${ingRes.status})`)
+          const ingData = await ingRes.json()
+          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: `Document ingested successfully with id: ${ingData.id}` }])
+          return
+        }
+        if (msg.startsWith("/calc sip ")) {
+          const parts = msg.replace("/calc sip ", "").trim().split(/\s+/)
+          const [monthly, annualRatePct, years] = parts.map(Number)
+          const calcRes = await fetch(`${API_BASE_URL}/api/chat/finance/calc`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "sip_future_value",
+              payload: {
+                monthlyContribution: monthly,
+                annualRate: (annualRatePct || 0) / 100,
+                years,
+              },
+            }),
+          })
+          if (!calcRes.ok) throw new Error(`Calc API failed (${calcRes.status})`)
+          const calcData = await calcRes.json()
+          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: `Projected SIP future value: **${calcData.result}**` }])
+          return
+        }
+        const payload = {
+          message: msg,
+          responseFormat: "json",
+        }
+        const res = await fetch(`${API_BASE_URL}/api/chat/structured`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-session-id": sessionIdRef.current,
+          },
+          body: JSON.stringify(payload),
+        })
+        if (!res.ok) throw new Error(`API failed (${res.status})`)
+        const data = await res.json()
+
+        const parts = []
+        if (data?.structured?.summary) parts.push(`**Summary:** ${data.structured.summary}`)
+        if (Array.isArray(data?.structured?.key_points) && data.structured.key_points.length) {
+          parts.push(`**Key points:**\n${data.structured.key_points.map((p) => `• ${p}`).join("\n")}`)
+        }
+        if (data?.marketSnapshot?.symbol) {
+          parts.push(`**Market:** ${data.marketSnapshot.symbol} at ${data.marketSnapshot.price} ${data.marketSnapshot.currency || ""}`)
+        }
+        if (Array.isArray(data?.retrieved) && data.retrieved.length) {
+          parts.push(`**Sources used:** ${data.retrieved.map((r) => r.title || r.id).join(", ")}`)
+        }
+        const response = parts.join("\n\n") || data?.reply || "No response available."
+        setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: response }])
+      } catch (_error) {
+        const stockMatch = detectStockQuery(msg)
+        if (stockMatch) {
+          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "widget", symbol: stockMatch.symbol, label: stockMatch.label }])
+          setThinking(false)
+          return
+        }
+        const response = getResponse(msg, fallbackIdx)
+        const isFallback = !findTopicMatch(msg)
+        if (isFallback) setFallbackIdx((i) => i + 1)
+        setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: response }])
+      } finally {
         setThinking(false)
-        return
       }
-      const response = getResponse(msg, fallbackIdx)
-      const isFallback = !findTopicMatch(msg)
-      if (isFallback) setFallbackIdx((i) => i + 1)
-      setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: response }])
-      setThinking(false)
-    }, 850 + Math.random() * 650)
+    })()
   }, [input, thinking, fallbackIdx])
 
   const onKey = (e) => {
@@ -1031,7 +1154,7 @@ export default function TryDerivity({ onBack }) {
         </div>
 
         <p className="text-center text-[10px] text-gray-800 mt-3 tracking-wide select-none">
-          Derivity AI · Under development · Responses are illustrative only
+          Commands: /market BTC, /calc sip 5000 12 10, /ingest text, /retrieve query
         </p>
       </div>
       )}

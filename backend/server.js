@@ -8,6 +8,8 @@ const cors = require('cors');
 const chatRouter = require('./routes/chat');
 const faqRouter = require('./routes/faq');
 const { config } = require('./services/config');
+const { authGuard, rateLimitGuard, requestSizeGuard } = require('./middleware/security');
+const { initMemoryStore } = require('./services/memoryStore');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,6 +27,9 @@ app.use(cors(corsOptions));
 
 // Parse JSON bodies (limit to 10 kb to prevent large payload attacks)
 app.use(express.json({ limit: '10kb' }));
+app.use(authGuard);
+app.use(rateLimitGuard);
+app.use(requestSizeGuard);
 
 // ── Routes ─────────────────────────────────────────────────────────────────
 
@@ -55,13 +60,16 @@ app.use((err, _req, res, _next) => {
 
 // ── Start ──────────────────────────────────────────────────────────────────
 
+initMemoryStore().finally(() => {
 app.listen(PORT, () => {
   console.log(`Derivity API server running on http://localhost:${PORT}`);
   console.log(`  GET  /api/health`);
   console.log(`  GET  /api/faq`);
   console.log(`  POST /api/chat`);
+  console.log(`  POST /api/chat/structured`);
   console.log(`  POST /api/chat/finance/calc`);
   console.log(`  GET  /api/chat/market`);
   console.log(`  POST /api/chat/ingest`);
   console.log(`  GET  /api/chat/retrieve`);
+});
 });

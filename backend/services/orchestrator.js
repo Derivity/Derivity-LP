@@ -9,6 +9,8 @@ const { calculateFromText } = require('./financeTools');
 const { retrieve } = require('./retrievalStore');
 const { createTraceId, logAudit } = require('./auditLogger');
 const { config } = require('./config');
+const { inferTaskType, enforceSchema, tryParseJson, TASK_SCHEMAS } = require('./structuredOutput');
+const { listTools, runTool } = require('./toolRegistry');
 
 const FINANCE_SYSTEM_PROMPT = `
 You are Derivity Pro Max, a finance-oriented AI analyst.
@@ -56,11 +58,13 @@ async function runFinanceQuery({ body, sessionId }) {
   const incomingMessages = normalizeMessages(body);
   const latestUserText = getLatestUserText(incomingMessages);
 
-  const memory = memoryStore.getSession(sessionId);
+  const memory = await memoryStore.getSession(sessionId);
   const marketIntent = parseIntentSymbol(latestUserText);
   const marketSnapshot = marketIntent ? await getMarketSnapshot(marketIntent).catch(() => null) : null;
-  const retrievalHits = retrieve(latestUserText, 3);
+  const retrievalHits = retrieve(latestUserText, config.retrievalTopK);
   const calcHint = calculateFromText(latestUserText);
+  const taskType = body?.taskType || inferTaskType(latestUserText);
+  const structuredMode = body?.responseFormat === 'json';
 
   const providerMessages = [
     { role: 'system', content: FINANCE_SYSTEM_PROMPT.trim() },
@@ -74,7 +78,41 @@ async function runFinanceQuery({ body, sessionId }) {
       content: `Additional context for this answer:\n${contextBlock}`,
     });
   }
+  if (structuredMode) {
+    providerMessages.push({
+      role: 'system',
+      content: `Return valid JSON only for task type "${taskType}" with required keys: ${TASK_SCHEMAS[taskType]?.required?.join(', ') || TASK_SCHEMAS.general_finance_answer.required.join(', ')}.`,
+    });
+  }
   providerMessages.push(...incomingMessages);
+
+  // Tool planning loop (max 2 hops for speed and safety).
+  const toolsPrompt = {
+    role: 'system',
+    content: `If tools are needed, output JSON exactly as {"tool":"<tool_name>","args":{...}} where tool_name is one of ${listTools().join(', ')}. Otherwise answer normally.`,
+  };
+  providerMessages.push(toolsPrompt);
+
+  for (let hop = 0; hop < 2; hop += 1) {
+    let planning;
+    try {
+      planning = await callOpenRouter(providerMessages, config.defaultModel);
+    } catch (_error) {
+      break;
+    }
+    const maybeTool = tryParseJson(planning.text);
+    if (!maybeTool?.tool) break;
+    if (!listTools().includes(maybeTool.tool)) break;
+    const toolResult = await runTool(maybeTool.tool, maybeTool.args).catch((e) => ({ error: e.message }));
+    providerMessages.push({
+      role: 'assistant',
+      content: planning.text,
+    });
+    providerMessages.push({
+      role: 'system',
+      content: `TOOL_RESULT ${maybeTool.tool}: ${JSON.stringify(toolResult)}`,
+    });
+  }
 
   let llmResult;
   let usedFallback = false;
@@ -104,7 +142,43 @@ async function runFinanceQuery({ body, sessionId }) {
     reasoning_details: llmResult.assistantMessage?.reasoning_details,
   };
 
-  memoryStore.append(sessionId, [...incomingMessages, assistantMessage]);
+  await memoryStore.append(sessionId, [...incomingMessages, assistantMessage]);
+
+  let structured = null;
+  if (structuredMode) {
+    const parsed = tryParseJson(llmResult.text);
+    const defaultByTask = {
+      general_finance_answer: {
+        summary: llmResult.text,
+        key_points: [],
+        risk_notes: [],
+        disclaimer: 'Educational content only, not financial advice.',
+      },
+      sip_plan: {
+        monthly_amount: null,
+        years: null,
+        assumed_annual_return: null,
+        projected_value: null,
+        notes: llmResult.text,
+        disclaimer: 'Educational content only, not financial advice.',
+      },
+      portfolio_risk: {
+        portfolio_summary: llmResult.text,
+        risk_level: 'unknown',
+        concentration_risks: [],
+        improvements: [],
+        disclaimer: 'Educational content only, not financial advice.',
+      },
+      market_brief: {
+        market_summary: llmResult.text,
+        drivers: [],
+        risks: [],
+        watchlist: [],
+        disclaimer: 'Educational content only, not financial advice.',
+      },
+    };
+    structured = enforceSchema(taskType, parsed || defaultByTask[taskType] || defaultByTask.general_finance_answer);
+  }
 
   const result = {
     traceId,
@@ -116,7 +190,9 @@ async function runFinanceQuery({ body, sessionId }) {
     meta: {
       usedFallback,
       latencyMs: Date.now() - startedAt,
+      taskType,
     },
+    ...(structuredMode ? { structured } : {}),
   };
 
   logAudit({
