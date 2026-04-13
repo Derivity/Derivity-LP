@@ -6,7 +6,197 @@ import remarkGfm from "remark-gfm"
 import ChatSidebar from "../components/ChatSidebar"
 import { SIDEBAR_PAGE_DATA } from "../data/sidebarPagesData"
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
+const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || ""
+const OPENROUTER_MODEL = import.meta.env.VITE_OPENROUTER_MODEL || "openai/gpt-4o-mini"
+
+function isProbablyFinanceQuery(text) {
+  const normalized = normalizeForMatch(text)
+  const financeHints = [
+    "stock", "market", "share", "equity", "nifty", "sensex", "news", "price",
+    "portfolio", "mutual fund", "sip", "etf", "bond", "crypto", "forex", "gold", "trading",
+  ]
+  return financeHints.some((hint) => hasKeywordMatch(normalized, hint))
+}
+
+function toYahooSymbol(tradingViewSymbol, rawText = "") {
+  const normalized = normalizeForMatch(rawText)
+  const directMap = {
+    "NASDAQ:AAPL": "AAPL",
+    "NASDAQ:TSLA": "TSLA",
+    "NASDAQ:NVDA": "NVDA",
+    "NASDAQ:MSFT": "MSFT",
+    "NASDAQ:GOOGL": "GOOGL",
+    "NASDAQ:AMZN": "AMZN",
+    "NASDAQ:META": "META",
+    "NASDAQ:NFLX": "NFLX",
+    "BITSTAMP:BTCUSD": "BTC-USD",
+    "BITSTAMP:ETHUSD": "ETH-USD",
+    "NSE:NIFTY": "^NSEI",
+    "BSE:SENSEX": "^BSESN",
+    "SP:SPX": "^GSPC",
+    "FOREXCOM:XAUUSD": "GC=F",
+    "FOREXCOM:XAGUSD": "SI=F",
+    "NSE:RELIANCE": "RELIANCE.NS",
+    "NSE:TCS": "TCS.NS",
+    "NSE:HDFCBANK": "HDFCBANK.NS",
+    "NSE:INFY": "INFY.NS",
+    "NSE:WIPRO": "WIPRO.NS",
+    "NSE:ICICIBANK": "ICICIBANK.NS",
+    "NSE:BAJFINANCE": "BAJFINANCE.NS",
+    "NSE:ADANIENT": "ADANIENT.NS",
+    "FX_IDC:USDINR": "INR=X",
+  }
+
+  if (directMap[tradingViewSymbol]) return directMap[tradingViewSymbol]
+  if (normalized.includes("usd inr") || normalized.includes("dollar")) return "INR=X"
+
+  const cleaned = String(tradingViewSymbol || "").split(":").pop()
+  return cleaned || null
+}
+
+async function fetchTextWithCorsFallback(url) {
+  try {
+    const res = await fetch(url)
+    if (res.ok) return res.text()
+  } catch (_error) {
+    // Ignore and attempt CORS fallback.
+  }
+
+  const wrappedUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`
+  const wrappedRes = await fetch(wrappedUrl)
+  if (!wrappedRes.ok) throw new Error(`Failed to fetch: ${url}`)
+  return wrappedRes.text()
+}
+
+async function fetchJsonWithCorsFallback(url) {
+  const text = await fetchTextWithCorsFallback(url)
+  return JSON.parse(text)
+}
+
+function parseRssItems(xmlText, limit = 5) {
+  try {
+    const parser = new DOMParser()
+    const doc = parser.parseFromString(xmlText, "application/xml")
+    const items = Array.from(doc.querySelectorAll("item")).slice(0, limit)
+    return items.map((item) => ({
+      title: item.querySelector("title")?.textContent?.trim() || "Untitled",
+      link: item.querySelector("link")?.textContent?.trim() || "",
+      pubDate: item.querySelector("pubDate")?.textContent?.trim() || "",
+      source: item.querySelector("source")?.textContent?.trim() || "",
+    }))
+  } catch (_error) {
+    return []
+  }
+}
+
+async function fetchYahooSnapshot(yahooSymbol) {
+  const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(yahooSymbol)}`
+  const data = await fetchJsonWithCorsFallback(url)
+  const row = data?.quoteResponse?.result?.[0]
+  if (!row) return null
+  return {
+    symbol: row.symbol,
+    name: row.shortName || row.longName || row.symbol,
+    price: row.regularMarketPrice,
+    currency: row.currency || "USD",
+    changePct: row.regularMarketChangePercent,
+    dayLow: row.regularMarketDayLow,
+    dayHigh: row.regularMarketDayHigh,
+  }
+}
+
+async function fetchFinanceNews(queryText, yahooSymbol = "") {
+  const newsUrls = [
+    yahooSymbol ? `https://feeds.finance.yahoo.com/rss/2.0/headline?s=${encodeURIComponent(yahooSymbol)}&region=US&lang=en-US` : "",
+    `https://news.google.com/rss/search?q=${encodeURIComponent(`${queryText} stock market finance`)}&hl=en-IN&gl=IN&ceid=IN:en`,
+  ].filter(Boolean)
+
+  const settled = await Promise.allSettled(newsUrls.map((url) => fetchTextWithCorsFallback(url)))
+  const items = settled
+    .filter((r) => r.status === "fulfilled")
+    .flatMap((r) => parseRssItems(r.value, 4))
+    .filter((item) => item.title && item.link)
+
+  const deduped = []
+  const seen = new Set()
+  for (const item of items) {
+    const key = `${item.title}|${item.link}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    deduped.push(item)
+    if (deduped.length >= 5) break
+  }
+  return deduped
+}
+
+async function callOpenRouterFromClient(userPrompt, contextBlock) {
+  if (!OPENROUTER_API_KEY) return ""
+
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: OPENROUTER_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: "You are a concise finance assistant. Use only provided context when quoting live numbers or headlines. If context is missing, say so clearly.",
+        },
+        {
+          role: "system",
+          content: `Finance context:\n${contextBlock}`,
+        },
+        { role: "user", content: userPrompt },
+      ],
+      temperature: 0.2,
+    }),
+  })
+
+  if (!response.ok) return ""
+  const payload = await response.json().catch(() => ({}))
+  const content = payload?.choices?.[0]?.message?.content
+  if (typeof content === "string") return content.trim()
+  if (Array.isArray(content)) return content.map((p) => (typeof p === "string" ? p : p?.text || "")).join("").trim()
+  return ""
+}
+
+async function buildDirectFinanceReply(userText) {
+  const stockMatch = detectStockQuery(userText)
+  const yahooSymbol = toYahooSymbol(stockMatch?.symbol, userText)
+
+  const [snapshot, news] = await Promise.all([
+    yahooSymbol ? fetchYahooSnapshot(yahooSymbol).catch(() => null) : Promise.resolve(null),
+    fetchFinanceNews(userText, yahooSymbol || "").catch(() => []),
+  ])
+
+  const contextLines = []
+  if (snapshot) {
+    contextLines.push(`Snapshot: ${snapshot.name} (${snapshot.symbol}) | Price ${snapshot.price} ${snapshot.currency} | Change ${snapshot.changePct}% | Day range ${snapshot.dayLow}-${snapshot.dayHigh}`)
+  }
+  if (news.length > 0) {
+    contextLines.push(`News:\n${news.map((n, idx) => `${idx + 1}. ${n.title} (${n.link})`).join("\n")}`)
+  }
+
+  const llmText = await callOpenRouterFromClient(userText, contextLines.join("\n\n"))
+  if (llmText) {
+    const sourcesLine = news.length ? `\n\n**Live sources:** Yahoo Finance, Google News RSS` : "\n\n**Live sources:** Yahoo Finance"
+    return `${llmText}${sourcesLine}`
+  }
+
+  const parts = []
+  if (snapshot) {
+    parts.push(
+      `**Live Market Snapshot**\n• ${snapshot.name} (${snapshot.symbol})\n• Price: ${snapshot.price ?? "N/A"} ${snapshot.currency || ""}\n• Change: ${snapshot.changePct ?? "N/A"}%\n• Day range: ${snapshot.dayLow ?? "N/A"} - ${snapshot.dayHigh ?? "N/A"}`
+    )
+  }
+  if (news.length > 0) {
+    parts.push(`**Latest Finance News**\n${news.map((n) => `• [${n.title}](${n.link})`).join("\n")}`)
+  }
+  return parts.join("\n\n").trim()
+}
 
 const TOPIC_RESPONSES = [
   {
@@ -684,7 +874,6 @@ export default function TryDerivity({ onBack }) {
   const bottomRef = useRef(null)
   const inputRef = useRef(null)
   const textareaRef = useRef(null)
-  const sessionIdRef = useRef(`web-${Date.now()}`)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -705,82 +894,33 @@ export default function TryDerivity({ onBack }) {
       try {
         if (msg.startsWith("/market ")) {
           const q = msg.replace("/market ", "").trim()
-          const marketRes = await fetch(`${API_BASE_URL}/api/chat/market?q=${encodeURIComponent(q)}`)
-          if (!marketRes.ok) throw new Error(`Market API failed (${marketRes.status})`)
-          const marketData = await marketRes.json()
-          const s = marketData?.snapshot
-          const marketText = `**Market Snapshot**\n• ${s?.symbol || "N/A"}\n• Price: ${s?.price ?? "N/A"} ${s?.currency || ""}\n• 24h change: ${s?.change24hPct ?? "N/A"}`
+          const marketText = await buildDirectFinanceReply(q)
           setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: marketText }])
-          return
-        }
-        if (msg.startsWith("/retrieve ")) {
-          const q = msg.replace("/retrieve ", "").trim()
-          const retRes = await fetch(`${API_BASE_URL}/api/chat/retrieve?q=${encodeURIComponent(q)}`)
-          if (!retRes.ok) throw new Error(`Retrieve API failed (${retRes.status})`)
-          const retData = await retRes.json()
-          const textLines = (retData?.hits || []).map((h) => `• ${h.title || h.id}: ${String(h.content || "").slice(0, 140)}...`)
-          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: `**Retrieved Documents**\n${textLines.join("\n") || "No matching documents."}` }])
-          return
-        }
-        if (msg.startsWith("/ingest ")) {
-          const content = msg.replace("/ingest ", "").trim()
-          const ingRes = await fetch(`${API_BASE_URL}/api/chat/ingest`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title: "Manual note", content, source: "chat-ui" }),
-          })
-          if (!ingRes.ok) throw new Error(`Ingest API failed (${ingRes.status})`)
-          const ingData = await ingRes.json()
-          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: `Document ingested successfully with id: ${ingData.id}` }])
           return
         }
         if (msg.startsWith("/calc sip ")) {
           const parts = msg.replace("/calc sip ", "").trim().split(/\s+/)
           const [monthly, annualRatePct, years] = parts.map(Number)
-          const calcRes = await fetch(`${API_BASE_URL}/api/chat/finance/calc`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              type: "sip_future_value",
-              payload: {
-                monthlyContribution: monthly,
-                annualRate: (annualRatePct || 0) / 100,
-                years,
-              },
-            }),
-          })
-          if (!calcRes.ok) throw new Error(`Calc API failed (${calcRes.status})`)
-          const calcData = await calcRes.json()
-          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: `Projected SIP future value: **${calcData.result}**` }])
+          const monthlyRate = ((annualRatePct || 0) / 100) / 12
+          const totalMonths = years * 12
+          const projectedValue = monthlyRate > 0
+            ? monthly * ((((1 + monthlyRate) ** totalMonths) - 1) / monthlyRate) * (1 + monthlyRate)
+            : monthly * totalMonths
+          const sipText = `Projected SIP future value: **${Math.round(projectedValue)}**`
+          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: sipText }])
           return
         }
-        const payload = {
-          message: msg,
-          responseFormat: "json",
+        if (isProbablyFinanceQuery(msg)) {
+          const directReply = await buildDirectFinanceReply(msg)
+          if (directReply) {
+            setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: directReply }])
+            return
+          }
         }
-        const res = await fetch(`${API_BASE_URL}/api/chat/structured`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-session-id": sessionIdRef.current,
-          },
-          body: JSON.stringify(payload),
-        })
-        if (!res.ok) throw new Error(`API failed (${res.status})`)
-        const data = await res.json()
 
-        const parts = []
-        if (data?.structured?.summary) parts.push(`**Summary:** ${data.structured.summary}`)
-        if (Array.isArray(data?.structured?.key_points) && data.structured.key_points.length) {
-          parts.push(`**Key points:**\n${data.structured.key_points.map((p) => `• ${p}`).join("\n")}`)
-        }
-        if (data?.marketSnapshot?.symbol) {
-          parts.push(`**Market:** ${data.marketSnapshot.symbol} at ${data.marketSnapshot.price} ${data.marketSnapshot.currency || ""}`)
-        }
-        if (Array.isArray(data?.retrieved) && data.retrieved.length) {
-          parts.push(`**Sources used:** ${data.retrieved.map((r) => r.title || r.id).join(", ")}`)
-        }
-        const response = parts.join("\n\n") || data?.reply || "No response available."
+        const response = getResponse(msg, fallbackIdx)
+        const isFallback = !findTopicMatch(msg)
+        if (isFallback) setFallbackIdx((i) => i + 1)
         setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: response }])
       } catch (_error) {
         const stockMatch = detectStockQuery(msg)
@@ -1154,7 +1294,7 @@ export default function TryDerivity({ onBack }) {
         </div>
 
         <p className="text-center text-[10px] text-gray-800 mt-3 tracking-wide select-none">
-          Commands: /market BTC, /calc sip 5000 12 10, /ingest text, /retrieve query
+          Commands: /market BTC, /calc sip 5000 12 10
         </p>
       </div>
       )}
