@@ -6,9 +6,6 @@ import remarkGfm from "remark-gfm"
 import ChatSidebar from "../components/ChatSidebar"
 import { SIDEBAR_PAGE_DATA } from "../data/sidebarPagesData"
 
-const OPENROUTER_API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || ""
-const OPENROUTER_MODEL = import.meta.env.VITE_OPENROUTER_MODEL || "openai/gpt-4o-mini"
-
 function isProbablyFinanceQuery(text) {
   const normalized = normalizeForMatch(text)
   const financeHints = [
@@ -129,40 +126,6 @@ async function fetchFinanceNews(queryText, yahooSymbol = "") {
   return deduped
 }
 
-async function callOpenRouterFromClient(userPrompt, contextBlock) {
-  if (!OPENROUTER_API_KEY) return ""
-
-  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: OPENROUTER_MODEL,
-      messages: [
-        {
-          role: "system",
-          content: "You are a concise finance assistant. Use only provided context when quoting live numbers or headlines. If context is missing, say so clearly.",
-        },
-        {
-          role: "system",
-          content: `Finance context:\n${contextBlock}`,
-        },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: 0.2,
-    }),
-  })
-
-  if (!response.ok) return ""
-  const payload = await response.json().catch(() => ({}))
-  const content = payload?.choices?.[0]?.message?.content
-  if (typeof content === "string") return content.trim()
-  if (Array.isArray(content)) return content.map((p) => (typeof p === "string" ? p : p?.text || "")).join("").trim()
-  return ""
-}
-
 async function buildDirectFinanceReply(userText) {
   const stockMatch = detectStockQuery(userText)
   const yahooSymbol = toYahooSymbol(stockMatch?.symbol, userText)
@@ -172,21 +135,13 @@ async function buildDirectFinanceReply(userText) {
     fetchFinanceNews(userText, yahooSymbol || "").catch(() => []),
   ])
 
-  const contextLines = []
-  if (snapshot) {
-    contextLines.push(`Snapshot: ${snapshot.name} (${snapshot.symbol}) | Price ${snapshot.price} ${snapshot.currency} | Change ${snapshot.changePct}% | Day range ${snapshot.dayLow}-${snapshot.dayHigh}`)
-  }
-  if (news.length > 0) {
-    contextLines.push(`News:\n${news.map((n, idx) => `${idx + 1}. ${n.title} (${n.link})`).join("\n")}`)
-  }
-
-  const llmText = await callOpenRouterFromClient(userText, contextLines.join("\n\n"))
-  if (llmText) {
-    const sourcesLine = news.length ? `\n\n**Live sources:** Yahoo Finance, Google News RSS` : "\n\n**Live sources:** Yahoo Finance"
-    return `${llmText}${sourcesLine}`
-  }
-
   const parts = []
+  const topicMatch = findTopicMatch(userText)
+
+  if (topicMatch) {
+    parts.push(topicMatch.response)
+  }
+
   if (snapshot) {
     parts.push(
       `**Live Market Snapshot**\n• ${snapshot.name} (${snapshot.symbol})\n• Price: ${snapshot.price ?? "N/A"} ${snapshot.currency || ""}\n• Change: ${snapshot.changePct ?? "N/A"}%\n• Day range: ${snapshot.dayLow ?? "N/A"} - ${snapshot.dayHigh ?? "N/A"}`
@@ -195,7 +150,92 @@ async function buildDirectFinanceReply(userText) {
   if (news.length > 0) {
     parts.push(`**Latest Finance News**\n${news.map((n) => `• [${n.title}](${n.link})`).join("\n")}`)
   }
+  if (snapshot || news.length > 0) {
+    parts.push("**Live sources:** Yahoo Finance, Google News RSS")
+  }
   return parts.join("\n\n").trim()
+}
+
+function needsClarification(text) {
+  const normalized = normalizeForMatch(text)
+  if (!normalized) return true
+
+  const words = normalized.split(" ").filter(Boolean)
+  if (words.length <= 2) {
+    const broadSingles = ["help", "advice", "invest", "stock", "market", "portfolio", "finance"]
+    if (words.some((w) => broadSingles.includes(w))) return true
+  }
+
+  const vaguePatterns = ["tell me", "explain", "help me", "what should i do", "suggest me"]
+  return vaguePatterns.some((p) => normalized === p)
+}
+
+function buildClarificationMessage() {
+  return "I can help with finance and general questions. To give the best answer, share:\n• Goal (learn, compare, decide, or summarize)\n• Topic or symbol (e.g., SIP, AAPL, Nifty)\n• Time horizon if relevant (today, 1 year, long term)\n• Risk preference if finance-related (low, medium, high)"
+}
+
+function isFinanceOnlyRequest(text) {
+  return Boolean(findTopicMatch(text) || detectStockQuery(text) || isProbablyFinanceQuery(text))
+}
+
+function isBasicSmallTalk(text) {
+  const normalized = normalizeForMatch(text)
+  const smallTalkPhrases = [
+    "hi", "hello", "hey", "good morning", "good afternoon", "good evening",
+    "how are you", "who are you", "thanks", "thank you", "ok", "okay",
+  ]
+  return smallTalkPhrases.some((p) => normalized === p || normalized.startsWith(`${p} `))
+}
+
+function buildSmallTalkReply(text) {
+  const normalized = normalizeForMatch(text)
+  if (normalized.includes("how are you")) {
+    return "I am doing great. I can help with finance questions, market updates, and general queries."
+  }
+  if (normalized.includes("who are you")) {
+    return "I am Derivity AI. I can answer finance questions with live market/news context and also help with basic general questions."
+  }
+  if (normalized.includes("thank")) {
+    return "You're welcome. Ask me anything you'd like to explore next."
+  }
+  return "Hi. I am here and ready to help. Ask me anything, including finance and market questions."
+}
+
+function trySimpleMath(text) {
+  const compact = String(text || "").replace(/\s+/g, "")
+  if (!/^[0-9+\-*/().%]+$/.test(compact)) return null
+  try {
+    // eslint-disable-next-line no-new-func
+    const value = Function(`"use strict"; return (${compact});`)()
+    if (typeof value !== "number" || Number.isNaN(value)) return null
+    return `Result: **${value}**`
+  } catch (_error) {
+    return null
+  }
+}
+
+function buildRuleBasedGeneralReply(userText) {
+  const text = normalizeForMatch(userText)
+
+  if (text.includes("weather")) {
+    return "I cannot check live weather here, but I can help you interpret weather forecasts if you share your city and forecast values."
+  }
+  if (text.includes("time")) {
+    return "I cannot read your system clock from this chat panel, but you can ask me any planning question based on your schedule."
+  }
+  if (text.includes("joke")) {
+    return "Here's one: Why did the investor bring a ladder? Because the market said it was time to go long."
+  }
+
+  return "I understand your request. Share a little more detail (what exact outcome you want), and I will give a precise step-by-step answer."
+}
+
+async function buildGeneralReply(userText) {
+  const mathReply = trySimpleMath(userText)
+  if (mathReply) return mathReply
+  const topicMatch = findTopicMatch(userText)
+  if (topicMatch) return topicMatch.response
+  return buildRuleBasedGeneralReply(userText)
 }
 
 const TOPIC_RESPONSES = [
@@ -910,13 +950,28 @@ export default function TryDerivity({ onBack }) {
           setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: sipText }])
           return
         }
-        if (isProbablyFinanceQuery(msg)) {
+
+        if (isBasicSmallTalk(msg)) {
+          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: buildSmallTalkReply(msg) }])
+          return
+        }
+
+        if (needsClarification(msg)) {
+          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: buildClarificationMessage() }])
+          return
+        }
+
+        if (isFinanceOnlyRequest(msg)) {
           const directReply = await buildDirectFinanceReply(msg)
           if (directReply) {
             setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: directReply }])
             return
           }
         }
+
+        const generalReply = await buildGeneralReply(msg)
+        setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: generalReply }])
+        return
 
         const response = getResponse(msg, fallbackIdx)
         const isFallback = !findTopicMatch(msg)
