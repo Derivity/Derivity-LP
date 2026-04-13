@@ -935,7 +935,12 @@ export default function TryDerivity({ onBack }) {
         if (msg.startsWith("/market ")) {
           const q = msg.replace("/market ", "").trim()
           const marketText = await buildDirectFinanceReply(q)
-          setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: marketText }])
+          const widgetMatch = detectStockQuery(`price ${q}`)
+          setMessages((prev) => [
+            ...prev,
+            { id: Date.now() + 1, role: "assistant", text: marketText },
+            ...(widgetMatch ? [{ id: Date.now() + 2, role: "widget", symbol: widgetMatch.symbol, label: widgetMatch.label }] : []),
+          ])
           return
         }
         if (msg.startsWith("/calc sip ")) {
@@ -964,7 +969,12 @@ export default function TryDerivity({ onBack }) {
         if (isFinanceOnlyRequest(msg)) {
           const directReply = await buildDirectFinanceReply(msg)
           if (directReply) {
-            setMessages((prev) => [...prev, { id: Date.now() + 1, role: "assistant", text: directReply }])
+            const widgetMatch = detectStockQuery(msg)
+            setMessages((prev) => [
+              ...prev,
+              { id: Date.now() + 1, role: "assistant", text: directReply },
+              ...(widgetMatch ? [{ id: Date.now() + 2, role: "widget", symbol: widgetMatch.symbol, label: widgetMatch.label }] : []),
+            ])
             return
           }
         }
